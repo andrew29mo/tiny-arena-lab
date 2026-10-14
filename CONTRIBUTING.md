@@ -19,6 +19,10 @@ Commit measurement sources before running `tools/run_benchmark.py`. Keep local
 builds and trial runs ignored; copy only verified selected evidence into
 `results/published/`. Historical measurements keep their original Git revision.
 Render figures from verified offsets/lifetimes and check their byte scales.
+The README publication check additionally compares current production, fixture,
+build and timing-driver hashes with the selected measurement. Changes to those
+files require a new measured revision and a deliberate update of the selected
+report path/tables; historical report verification alone is insufficient.
 
 Contributions are under the [MIT License](LICENSE). Preserve attribution and
 identify any third-party material rather than assuming MIT relicenses it.

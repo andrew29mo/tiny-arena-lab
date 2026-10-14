@@ -86,6 +86,54 @@ class PlannerTests(unittest.TestCase):
         p,s=rt.Plan(),rt.Scratch()
         self.assertEqual(self.lib.ta_plan_build(C.byref(owner.graph),1,C.byref(p),C.byref(s)),1)
 
+    def test_fanout_second_operand_dead_node_and_repeated_arena(self):
+        # Multiple inputs, an input output, an early output, fanout, and a dead
+        # node. Input 1's last use is exclusively Add's SECOND operand at step 7.
+        spec=[(0,rt.NONE,rt.NONE),(0,rt.NONE,rt.NONE),(2,0,rt.NONE),
+              (3,2,1),(2,2,rt.NONE),(3,2,3),(2,4,rt.NONE),(3,5,1),(2,7,rt.NONE)]
+        nodes=(rt.Node*len(spec))(*(rt.Node(op,a,b,2,17,None,None,0,0) for op,a,b in spec))
+        outputs=(rt.S*3)(0,3,8);g=rt.Graph(len(spec),3,nodes,outputs)
+        data=[(rt.F*34)(),(rt.F*34)()]
+        inputs=(rt.P*2)(*data);counts=(rt.S*2)(34,34)
+        plans=[];arenas=[]
+        for mode in range(2):
+            p,s=rt.Plan(),rt.Scratch()
+            self.assertEqual(self.lib.ta_plan_build(C.byref(g),mode,C.byref(p),C.byref(s)),0)
+            self.assertEqual(list(p.birth)[:g.count],[0,0,2,3,4,5,6,7,8])
+            self.assertEqual(list(p.death)[:g.count],[9,7,5,9,6,7,6,8,9])
+            plans.append(p);arenas.append(rt.Arena(p.arena_bytes))
+            # A corrupt plan may not overwrite operand b in its last consumer.
+            corrupt=rt.Plan.from_buffer_copy(p);corrupt.offset[7]=p.offset[1]
+            self.assertEqual(self.lib.ta_plan_validate(C.byref(g),C.byref(corrupt),C.byref(s)),3)
+        for iteration in range(4):
+            for k,values in enumerate(data):
+                for j in range(34):values[j]=((j*(3+k)+iteration*11)%31)-15
+            graph=rt.snapshot(g,inputs);gold=rt.oracle(graph);traces=[]
+            for mode,(p,arena) in enumerate(zip(plans,arenas)):
+                rt.validate_layout(graph,rt.layout(p),('separate','reuse')[mode])
+                observed=[];addresses=[]
+                @rt.OBS
+                def observer(i,values,count,_):
+                    observed.append((int(i),C.string_at(values,count*4)))
+                    addresses.append(C.cast(values,C.c_void_p).value-arena.address)
+                self.assertEqual(self.lib.ta_run(C.byref(g),C.byref(p),arena.address,arena.size,
+                    inputs,counts,2,observer,None),0)
+                self.assertEqual(addresses,list(p.offset)[:g.count])
+                self.assertEqual([i for i,_ in observed],list(range(g.count)))
+                for (i,raw),reference in zip(observed,gold):
+                    self.assertEqual(list((rt.F*34).from_buffer_copy(raw)),reference)
+                for id in outputs:
+                    self.assertEqual(list((rt.F*34).from_address(arena.address+p.offset[id])),gold[id])
+                arena.guards();traces.append(observed)
+                # Also run the production path without an observer on the SAME
+                # plan/arena. No memset/reallocation between any of these runs.
+                self.assertEqual(self.lib.ta_run(C.byref(g),C.byref(p),arena.address,arena.size,
+                    inputs,counts,2,rt.OBS(),None),0)
+                for id in outputs:
+                    self.assertEqual(list((rt.F*34).from_address(arena.address+p.offset[id])),gold[id])
+                arena.guards()
+            self.assertEqual(traces[0],traces[1])  # bitwise, every intermediate
+
 
 if __name__=='__main__':
     if '--fixtures-only' in sys.argv:

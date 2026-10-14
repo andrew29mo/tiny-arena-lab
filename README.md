@@ -67,6 +67,17 @@ on this host. Those fixed costs do not shrink with the arena. Neither the arena
 table nor arena + metadata + scratch represents whole-process memory usage.
 The heuristic does not reach the live-byte lower bound on every graph.
 
+For perspective, the following subtotal adds one plan and one explicit scratch
+object to each arena. It excludes other stack frames, graph descriptions, weights,
+external inputs, allocator overhead and host scaffolding; **it is not total RAM**.
+
+| Accounting graph | Separate arena + plan + scratch (B) | Reuse arena + plan + scratch (B) |
+| --- | ---: | ---: |
+| chain | 10144 | 8992 |
+| residual | 12576 | 10784 |
+| fork_outputs | 10208 | 9120 |
+| residual_stack | 20640 | 8992 |
+
 The first measured process also records actual guarded allocation requests and
 host allocator usable sizes below. Requests include 128 B of boundary guards;
 usable size can exceed the request. These figures exclude plan/scratch, weights
@@ -110,6 +121,11 @@ observation callbacks, verification and rendering are outside these intervals.
 Raw samples retain timer resolution. Six processes use rotating graph order and
 alternating mode order; summaries are medians of process medians and ranges.
 These are group-average plan costs, not single-call tail percentiles.
+The benchmark repeatedly plans warm, fixed graphs; it does not isolate a CPU core
+or control frequency/background activity. Process ranges show observed variation,
+not confidence intervals or portable performance guarantees. `ta_run` still
+validates its plan on every inference; that execution-side validation cost is not
+an inference benchmark here, even when a built plan is reused.
 
 ## Correctness and evidence
 
@@ -118,14 +134,22 @@ These are group-average plan costs, not single-call tail percentiles.
   non-finite inputs/results and stale/corrupted plan checks.
 - Every intermediate tensor is observed in the actual C executor and compared
   to the independent oracle; both plans must produce identical final outputs.
+- Directed multi-input/fanout/second-operand/dead-node coverage reuses each plan
+  and arena across changing inputs, with and without instrumentation, and checks
+  bitwise equality of every intermediate between layouts.
 - ASan/UBSan on production sources. Object-symbol checks for allocator references.
-- Compiled wrong lifetime, missing output pin and missing ReLU implementations
+- Compiled wrong lifetime, missing output pin, missing second-operand use,
+  first-consumer-only lifetime and missing ReLU implementations
   are rejected by native validation or independent lifetime/numerical checks.
 - Normal Python and `python -O`; raw-report corruption fixtures recompute hashes
   so semantic validation must catch the substituted data.
 - Archived source/object/library/executable hashes and exact compiler/link flags.
+- Current measured implementation hashes must still match the published run;
+  changes to production code, fixtures or timing require new evidence before
+  the README publication check passes. Additional tests can evolve independently.
 
-See [contribution guidance](CONTRIBUTING.md). Personal configuration, credentials,
+See the [MVP review](docs/REVIEW.md) and [contribution guidance](CONTRIBUTING.md).
+Personal configuration, credentials,
 local experiments and compiled binaries stay outside Git. A targeted publication
 guard is not an exhaustive secret detector.
 

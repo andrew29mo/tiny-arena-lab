@@ -13,11 +13,32 @@ import run_benchmark as rb
 import runtime as rt
 from verify_report import verify
 from visualize import svg
+from check_docs import check_measurement_sources
 
 PUBLISHED=ROOT/'results/published/host-20261014'
 
 
 class ReportingTests(unittest.TestCase):
+    def test_current_measurement_implementation_must_match(self):
+        manifest=json.loads((PUBLISHED/'manifest.json').read_text())
+        check_measurement_sources(ROOT,manifest)
+        with tempfile.TemporaryDirectory() as tmp:
+            directory=Path(tmp)
+            for name in manifest['sources']:
+                target=directory/name;target.parent.mkdir(parents=True,exist_ok=True)
+                shutil.copyfile(ROOT/name,target)
+            for name in ('src/graph.c','include/tiny_arena.h','tools/benchmark.c',
+                         'tools/workloads.c','tools/run_benchmark.py','Makefile'):
+                target=directory/name;original=target.read_bytes()
+                with self.subTest(source=name):
+                    target.write_bytes(original+b'\n')
+                    with self.assertRaisesRegex(ValueError,'current measurement implementation differs'):
+                        check_measurement_sources(directory,manifest)
+                    target.write_bytes(original)
+            # Additional coverage does not invalidate unchanged production timings.
+            (directory/'tests/test_planner.py').write_text('# changed test coverage\n')
+            check_measurement_sources(directory,manifest)
+
     def test_known_schedule(self):
         for run in range(6):
             order=rb.schedule(run,20)
