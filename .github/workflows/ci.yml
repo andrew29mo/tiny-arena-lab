@@ -24,13 +24,12 @@ jobs:
           python-version: '3.12'
       - name: Production correctness, independent oracles, sanitizers and compiled faults
         run: make test sanitize mutation
-      - name: Historical measurement and publication checks
-        run: make publication-check
+      - name: Current and archived measurements, licenses and publication checks
+        run: python tools/check_release.py
       - name: Real model, fixed budgets, every tensor and held-out tail
         run: |
           python examples/digits/run.py test
           python examples/digits/run.py sanitize
-          python examples/digits/verify.py results/published/digits-budget-reviewed-20261014 --docs
       - name: Independent installed dataset and sklearn export reference
         run: |
           python -m pip install -r examples/digits/requirements.txt

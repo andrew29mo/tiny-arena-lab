@@ -1,5 +1,8 @@
 # MVP review
 
+Historical review of the synthetic MVP. The later [real-model review](../examples/digits/REVIEW.md)
+and [release review](RELEASE_REVIEW.md) describe the expanded project.
+
 Reviewed the MVP at `6dd000f` and its selected measurement source `b149010`.
 Scope: production lifetime analysis, placement, validation and execution;
 tests against those exact C objects; and the memory/planning comparison.

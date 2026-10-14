@@ -2,6 +2,11 @@
 /results/*
 !/results/published/
 __pycache__/
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
 *.pyc
 .DS_Store
 AGENTS.md
@@ -19,6 +24,9 @@ backups/
 *.p12
 *.pfx
 *.o
+*.a
+*.obj
+*.dSYM/
 *.so
 *.dylib
 *.dll

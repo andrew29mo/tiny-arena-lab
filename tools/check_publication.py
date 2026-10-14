@@ -10,12 +10,14 @@ import subprocess
 ROOT = Path(__file__).resolve().parents[1]
 RULES = {
     "personal home path": re.compile(rb"/(?:Users|home)/[^/\s\"']+/"),
+    "Windows user path": re.compile(rb"(?i)[a-z]:[\\/](?:Users|Documents and Settings)[\\/][^\\/\s\"']+[\\/]"),
     "GitHub token": re.compile(rb"(?:gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{30,})"),
     "AWS access key": re.compile(rb"(?:AKIA|ASIA)[A-Z0-9]{16}"),
     "URL credential": re.compile(rb"https?://[^\s/:]+:[^\s/@]+@"),
     "private key": re.compile(rb"-----BEGIN (?:[A-Z0-9 ]+ )?PRIVATE KEY-----"),
 }
-FORBIDDEN_PARTS = {".aws", ".ssh", ".codex", ".agents", "__pycache__", "codex-notes", "backups"}
+FORBIDDEN_PARTS = {".aws", ".ssh", ".codex", ".agents", ".git", ".venv", "venv",
+                   ".pytest_cache", ".mypy_cache", ".ruff_cache", "__pycache__", "codex-notes", "backups"}
 FORBIDDEN_NAMES = {'.netrc', '_netrc', '.npmrc', '.pypirc', '.git-credentials', '.gitconfig',
                    '.ds_store', 'id_rsa', 'id_dsa', 'id_ecdsa', 'id_ed25519',
                    'credentials.json', 'token.json', 'application_default_credentials.json'}
@@ -36,6 +38,11 @@ def findings(name, data):
         issues.append("local-only or credential file")
     if data.startswith(BINARY_MAGIC):
         issues.append("compiled binary")
+    try:
+        data.decode('utf-8')
+        if b'\x00' in data:issues.append('unreviewed binary content')
+    except UnicodeDecodeError:
+        issues.append('unreviewed binary content')
     issues.extend(label for label, pattern in RULES.items() if pattern.search(data))
     return issues
 

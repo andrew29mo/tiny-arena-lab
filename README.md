@@ -20,7 +20,9 @@ Linux; default tests and tools use only the Python standard library.
 
 ```sh
 make test sanitize mutation
-make publication-check
+python3 examples/digits/run.py test
+python3 examples/digits/run.py sanitize
+python3 tools/check_release.py
 # Requires committed measurement sources; writes ignored local evidence.
 python3 tools/run_benchmark.py --output results/local/my-run
 python3 tools/verify_report.py results/local/my-run
@@ -130,6 +132,8 @@ observation callbacks, verification and rendering are outside these intervals.
 Raw samples retain timer resolution. Six processes use rotating graph order and
 alternating mode order; summaries are medians of process medians and ranges.
 These are group-average plan costs, not single-call tail percentiles.
+Observers execute synchronously inside `ta_run`; the provided timed inference
+passes disable them rather than automatically subtracting callback costs.
 The benchmark repeatedly plans warm, fixed graphs; it does not isolate a CPU core
 or control frequency/background activity. Process ranges show observed variation,
 not confidence intervals or portable performance guarantees. `ta_run` still
@@ -157,14 +161,16 @@ an inference benchmark here, even when a built plan is reused.
   changes to production code, fixtures or timing require new evidence before
   the README publication check passes. Additional tests can evolve independently.
 
-See the [MVP review](docs/REVIEW.md) and [contribution guidance](CONTRIBUTING.md).
+See the [MVP review](docs/REVIEW.md), [release review](docs/RELEASE_REVIEW.md)
+and [contribution guidance](CONTRIBUTING.md).
 Personal configuration, credentials,
 local experiments and compiled binaries stay outside Git. A targeted publication
 guard is not an exhaustive secret detector.
 
 ## Limits and license
 
-This is a host-side engineering experiment with synthetic graphs. It is not an
+This is a host-side engineering experiment with synthetic graphs and one small
+trained digits model. It is not an
 ONNX importer, production inference framework, optimal solver or MCU hardware
 validation. Smaller tensor storage does not imply faster inference or lower
 whole-process RAM. Planner cost is a separate trade-off and may be paid once per
@@ -172,5 +178,5 @@ static graph. Public pointers/counts must be valid and borrowed data immutable;
 the C API cannot establish arbitrary pointer validity.
 
 Project code, documentation and project-trained weights use the [MIT License](LICENSE).
-The digits fixture's dataset-derived images, labels and selection retain their
-[CC BY 4.0 attribution and terms](examples/digits/NOTICE.md).
+The dataset-derived images, labels and data in the digits fixture and published
+evidence retain their [CC BY 4.0 attribution and terms](THIRD_PARTY_NOTICES.md).

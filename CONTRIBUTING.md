@@ -1,6 +1,6 @@
 # Contributing
 
-Run `make test sanitize mutation publication-check` on macOS or Linux with a C11
+Run `make test sanitize mutation` and `python3 tools/check_release.py` on macOS or Linux with a C11
 compiler, Make, Git and Python 3.9+. No numerical Python packages are required.
 Use a full clone so historical measurement source revisions are available.
 
@@ -31,5 +31,6 @@ build and timing-driver hashes with the selected measurement. Changes to those
 files require a new measured revision and a deliberate update of the selected
 report path/tables; historical report verification alone is insufficient.
 
-Contributions are under the [MIT License](LICENSE). Preserve attribution and
-identify any third-party material rather than assuming MIT relicenses it.
+Original code contributions are under the [MIT License](LICENSE). Preserve the
+[third-party data notices](THIRD_PARTY_NOTICES.md) for the fixture and all published
+digit evidence; identify new third-party material rather than assuming MIT relicenses it.
