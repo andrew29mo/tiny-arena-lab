@@ -47,6 +47,15 @@ The planner is a heuristic. The peak sum of simultaneously live padded blocks is
 a **lower bound**, not proof an equally small static layout exists. The selected
 fork and residual-stack examples preserve visible gaps above that bound.
 
+## Real model under a fixed budget
+
+The [digits model experiment](examples/digits/README.md) transfers a trained
+64→32→10 ReLU MLP into the same production engine, checks all held-out examples
+against independent numerical/sklearn references, and compares layouts under
+explicit tensor-arena budgets. It includes real allocations, capacity rejection,
+full tail handling, deployment-storage accounting and C planning/inference timing.
+The synthetic measurements below retain their original source revision.
+
 ## Measurements
 
 Measured source: `b149010`, Apple M5 Pro, Darwin 27 arm64, Apple Clang 21.0.0.
@@ -162,4 +171,6 @@ whole-process RAM. Planner cost is a separate trade-off and may be paid once per
 static graph. Public pointers/counts must be valid and borrowed data immutable;
 the C API cannot establish arbitrary pointer validity.
 
-Project code and documentation use the [MIT License](LICENSE).
+Project code, documentation and project-trained weights use the [MIT License](LICENSE).
+The digits fixture's dataset-derived images, labels and selection retain their
+[CC BY 4.0 attribution and terms](examples/digits/NOTICE.md).
