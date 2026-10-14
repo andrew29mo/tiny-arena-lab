@@ -120,11 +120,14 @@ def verify(directory,docs=False):
     if docs:
         sys_path=__import__('sys').path;sys_path.insert(0,str(ROOT/'tools'))
         from check_docs import table
-        rows=[];cost=[]
+        rows=[];cost=[];allocations=[]
         for case in sorted(records[0]['cases'],key=lambda c:c['batch']):
             batch=case['batch'];a,b=case['modes'];correct=checks[str(batch)]['correct']
             rows.append([str(batch),str(case['budget_bytes']),str(a['arena_bytes']),str(b['arena_bytes']),
                 str(a['accounted_bytes']),str(b['accounted_bytes']),str(correct)+'/450'])
+            allocations.append([str(batch)]+[str(p[k]) for p in (a,b) for k in
+                ('allocation_request_bytes','allocator_usable_bytes')]+[
+                str(case['budget_request_bytes']),str(case['budget_usable_bytes'])])
             cost.append([str(batch)]+['%.3f'%(m['summaries']['%d/%d/%d'%(batch,mode,kind)]['median_ns']/1000)
                 for kind in (0,1) for mode in (0,1)])
         from visualize import svg
@@ -134,7 +137,8 @@ def verify(directory,docs=False):
                 ('separate','reuse'),record['plans']))))
             rt.require((HERE/('batch-%d.svg'%batch)).read_text()==figure,'real-model figure differs from actual plan')
         text=(HERE/'README.md').read_text()
-        rt.require(table(text,'Batch')==rows and table(text,'Timing batch')==cost and m['source_revision'][:7] in text,
+        rt.require(table(text,'Batch')==rows and table(text,'Timing batch')==cost and
+            table(text,'Allocation batch')==allocations and m['source_revision'][:7] in text,
                    'real-model README differs from measured evidence')
     print('PASS: real model, all intermediate tensors/tail, exact budgets, actual allocations, held-out accuracy and C timings')
     return m
