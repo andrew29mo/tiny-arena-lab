@@ -1,0 +1,269 @@
+{
+  "schema": 1,
+  "protocol": "digits-fixed-arena-budget-v2",
+  "source_revision": "1357529c80abee715a5e81fd24f3ede2a26e478d",
+  "created_utc": "2026-10-14T09:31:10.075643+00:00",
+  "sources": {
+    "include/tiny_arena.h": "effb63c6473e9dc37b9061bfae7bde7e8c044b468197b04665128bc0788e0e58",
+    "src/internal.h": "33802bd7df9acabda5143b9bddcb4f0db8cbc891a989ff54a3f8bdee648da975",
+    "src/graph.c": "d45f673d6331f6a9f1edad3f031583feb98cdd303515aee82a1850815c203c93",
+    "src/planner.c": "7bd3fe9c14df2cb8a3eb159e4a6e33fc14e81adacff6af191bf0f9020091fc94",
+    "src/execute.c": "fa235b8a6a553c4ed5e14ddfbada45baf785e6fa5a05e793cd4b4f9d3f5c5e5f",
+    "tools/runtime.py": "5a1cab2e5cc7c43e4610e96c864dc8d8469e9657e2019efb8b0bfbaff768a0c3",
+    "tools/visualize.py": "d11ad3fa5e67e2b87e34d8456a67a2f5609f53bb49d3332342dddea9ca5b355e",
+    "examples/digits/model.json": "c9a23808427cfe2f8b13002d8154442d5a3f21d66f4116fd1268f9b9054f08e8",
+    "examples/digits/fixture.json": "d4654d9306ed2e65306153edc4d4361d4519be21016101a153a443c3a5ced4a8",
+    "examples/digits/common.py": "a593c29885a75991cdc69d3fa876a1c3c76e2305fd4dc85cff6db97405b735ac",
+    "examples/digits/fixture.h": "bca5a7cecfb73aa12cd6fcfc9a6f796375b207325e82000218e000fc392dddc8",
+    "examples/digits/fixture.c": "53b73374f0313a5189afc280dc80f7870c5216394f30fdb76ea4576839899b8c",
+    "examples/digits/benchmark.c": "e9c534e2f406baaa03b6df03c1cf58a9c4d068e80e27a831b6b677459eaf5cba",
+    "examples/digits/run.py": "b88791bd15ac852d44aeb84ed1d18e1df513e76b5c51200b2f8375172aea2cab",
+    "examples/digits/verify.py": "346b9e4231bc8e8f9c043dd9b2fe3e0752e1878cc629ce06288e7888b4c29c57",
+    "examples/digits/test_digits.py": "31b0c71c98437835656c2ebdbf9a14d255021edcedf496e092f9666f7bec479f",
+    "examples/digits/prepare.py": "afe53c938f0c3c5c4032c6606fbab1321a50e2a4a695c58d19760f4ad2d4fd5c",
+    "examples/digits/requirements.txt": "95fa829941cb048ce16f5f406f6b38631ee87c03082db25ab070c8fd623603e2"
+  },
+  "build": {
+    "commands": [
+      [
+        "cc",
+        "-Iinclude",
+        "-Iexamples/digits",
+        "-Ibuild/digits",
+        "-std=c11",
+        "-O3",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-Werror",
+        "-ffp-contract=off",
+        "-fPIC",
+        "-c",
+        "src/graph.c",
+        "-o",
+        "build/digits/graph.o"
+      ],
+      [
+        "cc",
+        "-Iinclude",
+        "-Iexamples/digits",
+        "-Ibuild/digits",
+        "-std=c11",
+        "-O3",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-Werror",
+        "-ffp-contract=off",
+        "-fPIC",
+        "-c",
+        "src/planner.c",
+        "-o",
+        "build/digits/planner.o"
+      ],
+      [
+        "cc",
+        "-Iinclude",
+        "-Iexamples/digits",
+        "-Ibuild/digits",
+        "-std=c11",
+        "-O3",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-Werror",
+        "-ffp-contract=off",
+        "-fPIC",
+        "-c",
+        "src/execute.c",
+        "-o",
+        "build/digits/execute.o"
+      ],
+      [
+        "cc",
+        "-Iinclude",
+        "-Iexamples/digits",
+        "-Ibuild/digits",
+        "-std=c11",
+        "-O3",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-Werror",
+        "-ffp-contract=off",
+        "-fPIC",
+        "-c",
+        "examples/digits/fixture.c",
+        "-o",
+        "build/digits/fixture.o"
+      ],
+      [
+        "cc",
+        "-shared",
+        "build/digits/graph.o",
+        "build/digits/planner.o",
+        "build/digits/execute.o",
+        "build/digits/fixture.o",
+        "-lm",
+        "-o",
+        "build/digits/engine.so"
+      ],
+      [
+        "cc",
+        "-Iinclude",
+        "-Iexamples/digits",
+        "-Ibuild/digits",
+        "-std=c11",
+        "-O3",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-Werror",
+        "-ffp-contract=off",
+        "examples/digits/benchmark.c",
+        "build/digits/graph.o",
+        "build/digits/planner.o",
+        "build/digits/execute.o",
+        "build/digits/fixture.o",
+        "-lm",
+        "-o",
+        "build/digits/benchmark"
+      ]
+    ],
+    "compiler": "Apple clang version 21.0.0 (clang-2100.3.34.2)",
+    "generated_header_sha256": "5bb3c6a14fecd1b3c2ebcf768409cc25b39fa094e0d639c014e9bf440828ff62",
+    "objects": {
+      "build/digits/execute.o": "5d0be3621bd7d6917dfcf6fda7575e2ff107ec9235e015b916f383774ae9f121",
+      "build/digits/fixture.o": "b16b719878add0438e8927970a43b6a8eb180dd2ce09e8084651433a51be09b2",
+      "build/digits/graph.o": "fac0bbdf04cdf4e7cabd5fe993709d078e00b25ba087a8a9bd2f58e042b6a52e",
+      "build/digits/planner.o": "9fe3f888e7cec6e35b2ed3ac96d6984b7cd273669569aaf0bfae564a69091870"
+    },
+    "binaries": {
+      "build/digits/engine.so": "d5af1755b0950f0a508beb2aa08760151374acdb6b48d35d21dce645fbd8aded",
+      "build/digits/benchmark": "d3570a413a3e60e2848ae3443a6d2815fca602d4ab6d5841cd7855e51f73faf1"
+    }
+  },
+  "runs": 6,
+  "samples": 11,
+  "platform": {
+    "system": "Darwin",
+    "release": "27.0.0",
+    "machine": "arm64",
+    "cpu": "Apple M5 Pro"
+  },
+  "summaries": {
+    "1/0/0": {
+      "median_ns": 77.63671875,
+      "process_medians_ns": [
+        80.078125,
+        78.125,
+        76.171875,
+        77.1484375,
+        79.1015625,
+        77.1484375
+      ],
+      "minimum_ns": 76.171875,
+      "maximum_ns": 80.078125
+    },
+    "1/0/1": {
+      "median_ns": 728.8888888888889,
+      "process_medians_ns": [
+        743.8888888888889,
+        705.0,
+        756.6666666666666,
+        712.2222222222222,
+        713.8888888888889,
+        750.0
+      ],
+      "minimum_ns": 705.0,
+      "maximum_ns": 756.6666666666666
+    },
+    "1/1/0": {
+      "median_ns": 83.0078125,
+      "process_medians_ns": [
+        85.9375,
+        83.984375,
+        82.03125,
+        83.0078125,
+        83.0078125,
+        78.125
+      ],
+      "minimum_ns": 78.125,
+      "maximum_ns": 85.9375
+    },
+    "1/1/1": {
+      "median_ns": 726.1111111111111,
+      "process_medians_ns": [
+        792.7777777777778,
+        703.8888888888889,
+        743.8888888888889,
+        705.0,
+        708.3333333333334,
+        770.5555555555555
+      ],
+      "minimum_ns": 703.8888888888889,
+      "maximum_ns": 792.7777777777778
+    },
+    "16/0/0": {
+      "median_ns": 77.63671875,
+      "process_medians_ns": [
+        77.1484375,
+        79.1015625,
+        78.125,
+        77.1484375,
+        78.125,
+        77.1484375
+      ],
+      "minimum_ns": 77.1484375,
+      "maximum_ns": 79.1015625
+    },
+    "16/0/1": {
+      "median_ns": 685.0,
+      "process_medians_ns": [
+        711.1111111111111,
+        684.4444444444445,
+        692.7777777777778,
+        685.5555555555555,
+        680.5555555555555,
+        680.5555555555555
+      ],
+      "minimum_ns": 680.5555555555555,
+      "maximum_ns": 711.1111111111111
+    },
+    "16/1/0": {
+      "median_ns": 81.0546875,
+      "process_medians_ns": [
+        81.0546875,
+        83.984375,
+        78.125,
+        81.0546875,
+        82.03125,
+        81.0546875
+      ],
+      "minimum_ns": 78.125,
+      "maximum_ns": 83.984375
+    },
+    "16/1/1": {
+      "median_ns": 685.8333333333333,
+      "process_medians_ns": [
+        715.0,
+        689.4444444444445,
+        680.5555555555555,
+        687.2222222222222,
+        684.4444444444445,
+        681.6666666666666
+      ],
+      "minimum_ns": 680.5555555555555,
+      "maximum_ns": 715.0
+    }
+  },
+  "files": {
+    "run-05.json": "8bfb76f7dad7499c54ae8d3c4867f54c2d047b9ffdcbc62d338b9feab26aa6f5",
+    "run-04.json": "47d808a3855b5004980d1d44d0cf70dcad15dc63d2ff19decbe63381700af247",
+    "correctness.json": "1c8e97a908f71ca715488ed609724e95356ba0061765942e5d6a7b47f983abca",
+    "run-03.json": "d42aea3f21e8ec44ceabbcea69ca846a258bdbb3da069591d4f9bdf5d7646e17",
+    "run-02.json": "e6d05903f7539f1891bcfd572868a2edd8a42c8d6b99293d4a5b065133c752f5",
+    "run-01.json": "5c67b6fe4e19a681d0a6e8b2611a9aae4bdc1a6defe2eb86d4e07c662fda9a39",
+    "run-00.json": "82584fa7a8b51490aebf2a36cdd3b8677a5da2a9bdf374179a84e2c79b8c92a0"
+  }
+}

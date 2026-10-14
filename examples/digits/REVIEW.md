@@ -91,3 +91,18 @@ arena/plan/scratch, parameters, graph descriptors and an active input batch;
 it excludes other stack/allocator/runtime/test-harness costs. The harness keeps
 additional comparison and capture objects. Neither the payload budget nor this
 subtotal proves a physical whole-process RAM ceiling or MCU feasibility.
+
+## Verification and current results
+
+The corrected v2 run uses source `1357529`, six fresh processes and eleven groups
+per process. Accuracy remains 438/450 (97.33%) for both layouts/batches; arena and
+accounted storage sizes are unchanged. At batch 16 the observed median inference
+cost is 0.685 vs 0.686 µs per valid example; process ranges overlap. Output auditing
+is included in both figures and no speedup is claimed. Full values and raw records
+are linked from the [current protocol/results](README.md).
+
+Validation covers eight real-model tests in normal and optimized Python,
+ASan/UBSan, the production-kernel missing-ReLU fault, four compiled harness faults,
+semantic raw-record corruption tests, independent installed dataset/sklearn checks
+and regenerated report/diagram tables. The existing synthetic core tests and
+their historical evidence remain applicable because their sources are unchanged.

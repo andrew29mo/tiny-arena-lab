@@ -80,7 +80,7 @@ rows have been consumed. Input normalization is fixed and prepared outside timin
 
 ## Selected measurements
 
-Measured source `edfce00`, Apple M5 Pro / Darwin 27 arm64 / Apple Clang 21.0.0.
+Measured source `1357529`, Apple M5 Pro / Darwin 27 arm64 / Apple Clang 21.0.0.
 Six fresh processes, eleven sample groups per process. Accuracy is **438/450
 (97.33%)** for both layouts and batch sizes, matching sklearn classes.
 
@@ -110,8 +110,8 @@ valid example in a full-test pass (including final-batch padding):
 
 | Timing batch | Separate plan (µs) | Reuse plan (µs) | Separate infer (µs/example) | Reuse infer (µs/example) |
 | --- | ---: | ---: | ---: | ---: |
-| 1 | 0.078 | 0.083 | 0.701 | 0.701 |
-| 16 | 0.078 | 0.082 | 0.677 | 0.684 |
+| 1 | 0.078 | 0.083 | 0.729 | 0.726 |
+| 16 | 0.078 | 0.081 | 0.685 | 0.686 |
 
 Process ranges overlap; these observations demonstrate budget feasibility, not a
 reliable inference speedup. Small planning differences are near host timing
