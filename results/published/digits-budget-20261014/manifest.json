@@ -1,0 +1,269 @@
+{
+  "schema": 1,
+  "protocol": "digits-fixed-arena-budget-v1",
+  "source_revision": "edfce009303b2972a261d446d8d2f90253215dcf",
+  "created_utc": "2026-10-14T09:15:40.230351+00:00",
+  "sources": {
+    "include/tiny_arena.h": "effb63c6473e9dc37b9061bfae7bde7e8c044b468197b04665128bc0788e0e58",
+    "src/internal.h": "33802bd7df9acabda5143b9bddcb4f0db8cbc891a989ff54a3f8bdee648da975",
+    "src/graph.c": "d45f673d6331f6a9f1edad3f031583feb98cdd303515aee82a1850815c203c93",
+    "src/planner.c": "7bd3fe9c14df2cb8a3eb159e4a6e33fc14e81adacff6af191bf0f9020091fc94",
+    "src/execute.c": "fa235b8a6a553c4ed5e14ddfbada45baf785e6fa5a05e793cd4b4f9d3f5c5e5f",
+    "tools/runtime.py": "5a1cab2e5cc7c43e4610e96c864dc8d8469e9657e2019efb8b0bfbaff768a0c3",
+    "tools/visualize.py": "d11ad3fa5e67e2b87e34d8456a67a2f5609f53bb49d3332342dddea9ca5b355e",
+    "examples/digits/model.json": "c9a23808427cfe2f8b13002d8154442d5a3f21d66f4116fd1268f9b9054f08e8",
+    "examples/digits/fixture.json": "d4654d9306ed2e65306153edc4d4361d4519be21016101a153a443c3a5ced4a8",
+    "examples/digits/common.py": "3aefdf7d47d3b16d490d4e940d56c00fd6d3ff33d755fb1efc094330b510c182",
+    "examples/digits/fixture.h": "bca5a7cecfb73aa12cd6fcfc9a6f796375b207325e82000218e000fc392dddc8",
+    "examples/digits/fixture.c": "53b73374f0313a5189afc280dc80f7870c5216394f30fdb76ea4576839899b8c",
+    "examples/digits/benchmark.c": "c5f0aaebd4904761a54109a16bfaea74cf87c20aac9385ce67eb1bd6fb520be7",
+    "examples/digits/run.py": "b82d2a86bf0348db341028110cbbd4cabb3527733c5d3dcf69c5ac86a3bebdd3",
+    "examples/digits/verify.py": "208be9319969e449dd89980029843025302c25e2f95bd1132c36fdd6743e1901",
+    "examples/digits/test_digits.py": "306287b272365f8ddf28198a158d119681fcf4f4cdefc5e662b74d903f075a6a",
+    "examples/digits/prepare.py": "afbf6ce7a28cfc06e9513dbd22688bd46f426d6b44d3cba5b5a3e620fb7ee9d0",
+    "examples/digits/requirements.txt": "95fa829941cb048ce16f5f406f6b38631ee87c03082db25ab070c8fd623603e2"
+  },
+  "build": {
+    "commands": [
+      [
+        "cc",
+        "-Iinclude",
+        "-Iexamples/digits",
+        "-Ibuild/digits",
+        "-std=c11",
+        "-O3",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-Werror",
+        "-ffp-contract=off",
+        "-fPIC",
+        "-c",
+        "src/graph.c",
+        "-o",
+        "build/digits/graph.o"
+      ],
+      [
+        "cc",
+        "-Iinclude",
+        "-Iexamples/digits",
+        "-Ibuild/digits",
+        "-std=c11",
+        "-O3",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-Werror",
+        "-ffp-contract=off",
+        "-fPIC",
+        "-c",
+        "src/planner.c",
+        "-o",
+        "build/digits/planner.o"
+      ],
+      [
+        "cc",
+        "-Iinclude",
+        "-Iexamples/digits",
+        "-Ibuild/digits",
+        "-std=c11",
+        "-O3",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-Werror",
+        "-ffp-contract=off",
+        "-fPIC",
+        "-c",
+        "src/execute.c",
+        "-o",
+        "build/digits/execute.o"
+      ],
+      [
+        "cc",
+        "-Iinclude",
+        "-Iexamples/digits",
+        "-Ibuild/digits",
+        "-std=c11",
+        "-O3",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-Werror",
+        "-ffp-contract=off",
+        "-fPIC",
+        "-c",
+        "examples/digits/fixture.c",
+        "-o",
+        "build/digits/fixture.o"
+      ],
+      [
+        "cc",
+        "-shared",
+        "build/digits/graph.o",
+        "build/digits/planner.o",
+        "build/digits/execute.o",
+        "build/digits/fixture.o",
+        "-lm",
+        "-o",
+        "build/digits/engine.so"
+      ],
+      [
+        "cc",
+        "-Iinclude",
+        "-Iexamples/digits",
+        "-Ibuild/digits",
+        "-std=c11",
+        "-O3",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-Werror",
+        "-ffp-contract=off",
+        "examples/digits/benchmark.c",
+        "build/digits/graph.o",
+        "build/digits/planner.o",
+        "build/digits/execute.o",
+        "build/digits/fixture.o",
+        "-lm",
+        "-o",
+        "build/digits/benchmark"
+      ]
+    ],
+    "compiler": "Apple clang version 21.0.0 (clang-2100.3.34.2)",
+    "generated_header_sha256": "5bb3c6a14fecd1b3c2ebcf768409cc25b39fa094e0d639c014e9bf440828ff62",
+    "objects": {
+      "build/digits/execute.o": "5d0be3621bd7d6917dfcf6fda7575e2ff107ec9235e015b916f383774ae9f121",
+      "build/digits/fixture.o": "b16b719878add0438e8927970a43b6a8eb180dd2ce09e8084651433a51be09b2",
+      "build/digits/graph.o": "fac0bbdf04cdf4e7cabd5fe993709d078e00b25ba087a8a9bd2f58e042b6a52e",
+      "build/digits/planner.o": "9fe3f888e7cec6e35b2ed3ac96d6984b7cd273669569aaf0bfae564a69091870"
+    },
+    "binaries": {
+      "build/digits/engine.so": "d5af1755b0950f0a508beb2aa08760151374acdb6b48d35d21dce645fbd8aded",
+      "build/digits/benchmark": "105099fbb9a13d6157c8bef8257fb7826ed2b6704216348c4c515f34b3abe6bb"
+    }
+  },
+  "runs": 6,
+  "samples": 11,
+  "platform": {
+    "system": "Darwin",
+    "release": "27.0.0",
+    "machine": "arm64",
+    "cpu": "Apple M5 Pro"
+  },
+  "summaries": {
+    "1/0/0": {
+      "median_ns": 78.125,
+      "process_medians_ns": [
+        100.5859375,
+        76.171875,
+        77.1484375,
+        77.1484375,
+        79.1015625,
+        81.0546875
+      ],
+      "minimum_ns": 76.171875,
+      "maximum_ns": 100.5859375
+    },
+    "1/0/1": {
+      "median_ns": 701.3888888888889,
+      "process_medians_ns": [
+        878.8888888888889,
+        705.0,
+        697.7777777777778,
+        703.3333333333334,
+        699.4444444444445,
+        697.7777777777778
+      ],
+      "minimum_ns": 697.7777777777778,
+      "maximum_ns": 878.8888888888889
+    },
+    "1/1/0": {
+      "median_ns": 82.51953125,
+      "process_medians_ns": [
+        96.6796875,
+        80.078125,
+        82.03125,
+        78.125,
+        83.0078125,
+        83.0078125
+      ],
+      "minimum_ns": 78.125,
+      "maximum_ns": 96.6796875
+    },
+    "1/1/1": {
+      "median_ns": 700.5555555555555,
+      "process_medians_ns": [
+        882.2222222222222,
+        696.1111111111111,
+        695.0,
+        707.7777777777778,
+        701.1111111111111,
+        700.0
+      ],
+      "minimum_ns": 695.0,
+      "maximum_ns": 882.2222222222222
+    },
+    "16/0/0": {
+      "median_ns": 78.125,
+      "process_medians_ns": [
+        78.125,
+        78.125,
+        78.125,
+        77.1484375,
+        77.1484375,
+        78.125
+      ],
+      "minimum_ns": 77.1484375,
+      "maximum_ns": 78.125
+    },
+    "16/0/1": {
+      "median_ns": 676.9444444444443,
+      "process_medians_ns": [
+        701.6666666666666,
+        763.8888888888889,
+        677.2222222222222,
+        676.6666666666666,
+        670.5555555555555,
+        676.1111111111111
+      ],
+      "minimum_ns": 670.5555555555555,
+      "maximum_ns": 763.8888888888889
+    },
+    "16/1/0": {
+      "median_ns": 81.54296875,
+      "process_medians_ns": [
+        81.0546875,
+        82.03125,
+        82.03125,
+        81.0546875,
+        79.1015625,
+        83.0078125
+      ],
+      "minimum_ns": 79.1015625,
+      "maximum_ns": 83.0078125
+    },
+    "16/1/1": {
+      "median_ns": 684.1666666666667,
+      "process_medians_ns": [
+        698.8888888888889,
+        709.4444444444445,
+        682.7777777777778,
+        685.0,
+        679.4444444444445,
+        683.3333333333334
+      ],
+      "minimum_ns": 679.4444444444445,
+      "maximum_ns": 709.4444444444445
+    }
+  },
+  "files": {
+    "run-05.json": "c9e2f9884ed6b4bd0756ee093b49967da35f96667c044389b2028d73a2c79197",
+    "run-04.json": "94a8a5341c9b96f9143f57d6a6c53b6407aba432245a42309249cff763fcc4ce",
+    "correctness.json": "1c8e97a908f71ca715488ed609724e95356ba0061765942e5d6a7b47f983abca",
+    "run-03.json": "431b29a79dbe5ae94d900ae4e0f81a818407f21c208f8d2f07372fdf1a2edab0",
+    "run-02.json": "70dcb4e17e06408e2d2b18c0dc8fa70f3c31634a5b2c4288129ddb96a7bf8657",
+    "run-01.json": "e576c08e9bdcc19b52d6b732c5d68352171cefe4304bfba6325483c97d7fffca",
+    "run-00.json": "6ed2dabd38ca41ca78bc7ba1e203fe222810347c42cc12ea44236bd5ab295f97"
+  }
+}

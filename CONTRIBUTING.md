@@ -4,6 +4,13 @@ Run `make test sanitize mutation publication-check` on macOS or Linux with a C11
 compiler, Make, Git and Python 3.9+. No numerical Python packages are required.
 Use a full clone so historical measurement source revisions are available.
 
+For the real digits example also run `python3 examples/digits/run.py test`,
+`python3 examples/digits/run.py sanitize` and
+`python3 examples/digits/verify.py results/published/digits-budget-20261014 --docs`.
+See its [protocol](examples/digits/README.md) for the optional installed sklearn
+reference check. Keep test-set accuracy, payload capacity, allocator usable bytes
+and accounted storage distinct; preserve all valid tail examples and timed padding.
+
 Preserve inclusive last-read lifetimes, pinned outputs, alignment, checked sizes,
 and the single fixed execution order. Tests must exercise the real planner and
 kernels, with independent lifetimes and intermediate numerical references.

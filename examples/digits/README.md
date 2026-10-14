@@ -79,7 +79,50 @@ rows have been consumed. Input normalization is fixed and prepared outside timin
 
 ## Selected measurements
 
-Pending committed-source measurement. Tables are inserted only after verification.
+Measured source `edfce00`, Apple M5 Pro / Darwin 27 arm64 / Apple Clang 21.0.0.
+Six fresh processes, eleven sample groups per process. Accuracy is **438/450
+(97.33%)** for both layouts and batch sizes, matching sklearn classes.
+
+| Batch | Arena budget (B) | Separate arena (B) | Reused arena (B) | Separate accounted (B) | Reuse accounted (B) | Correct |
+| --- | ---: | ---: | ---: | ---: | ---: | --- |
+| 1 | 512 | 576 | 384 | 19024 | 18832 | 438/450 |
+| 16 | 7168 | 8832 | 6144 | 31120 | 28432 | 438/450 |
+
+Separate returns TA_CAPACITY under each arena budget; reuse completes all examples.
+The corresponding accounted-storage budgets (fixed storage + arena budget) are
+18,960 B at batch 1 and 29,456 B at batch 16; separate exceeds them and reuse fits.
+These remain accounting subtotals, not measured total RAM ceilings.
+
+Actual first-process native allocations, including 128 B of test redzones:
+
+| Allocation batch | Separate request (B) | Separate usable (B) | Reuse request (B) | Reuse usable (B) | Budget request (B) | Budget usable (B) |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| 1 | 704 | 768 | 512 | 512 | 640 | 640 |
+| 16 | 8960 | 10240 | 6272 | 7168 | 7296 | 8192 |
+
+For example, the 7-KiB payload limit does not mean malloc consumes only 7 KiB;
+its guarded request and allocator usable bytes are shown explicitly above. The
+capacity supplied to the executor is always exactly the stated payload budget.
+
+Median of process medians; planning is µs per complete build, inference is µs per
+valid example in a full-test pass (including final-batch padding):
+
+| Timing batch | Separate plan (µs) | Reuse plan (µs) | Separate infer (µs/example) | Reuse infer (µs/example) |
+| --- | ---: | ---: | ---: | ---: |
+| 1 | 0.078 | 0.083 | 0.701 | 0.701 |
+| 16 | 0.078 | 0.082 | 0.677 | 0.684 |
+
+Process ranges overlap; these observations demonstrate budget feasibility, not a
+reliable inference speedup. Small planning differences are near host timing
+variation. Exact samples, clock resolution and process ranges are retained in
+the [manifest](../../results/published/digits-budget-20261014/manifest.json);
+[correctness evidence](../../results/published/digits-budget-20261014/correctness.json)
+includes every intermediate, actual address offsets and all 450 final logits.
+
+![Batch 16 actual allocation comparison](batch-16.svg)
+
+The [batch 1 diagram](batch-1.svg) is also available. These diagrams show tensor
+arena storage only, with the first two panels sharing the same byte scale.
 
 ## Timing interpretation
 

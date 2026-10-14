@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1160" height="1080" viewBox="0 0 1160 1080" role="img" aria-labelledby="title desc">
+<title id="title">digits_batch_1 tensor lifetimes and arena layout</title>
+<desc id="desc">Separate and reused layouts share the first two byte axes. A third panel zooms reused storage. Lifetimes are inclusive; outputs are pinned.</desc>
+<rect width="1160" height="1080" fill="#f8fafc"/>
+<style>text{font-family:Arial,sans-serif;fill:#172033}.tick{font-size:12px;fill:#526176}.bar:hover{fill-opacity:1;stroke:#111827;stroke-width:2}</style>
+<text x="40" y="38" font-size="25" font-weight="700">digits_batch_1 · static arena layout</text>
+<text x="40" y="65" font-size="15">Separate 576 B → reused 384 B · 33.3% less tensor storage · live-byte lower bound 384 B</text>
+<text x="40" y="90" font-size="13">64-byte aligned blocks · inclusive last-read lifetimes · pinned outputs have a dark border · hover for exact values</text>
+<text x="40" y="125" font-size="17" font-weight="700">Separate buffers — full byte scale</text>
+<rect x="115" y="145" width="1000" height="205" fill="white" stroke="#cbd5e1"/>
+<path d="M 115 350 H 1115" stroke="#e2e8f0"/>
+<text class="tick" x="105" y="354" text-anchor="end">0 B</text>
+<path d="M 115 298.75 H 1115" stroke="#e2e8f0"/>
+<text class="tick" x="105" y="302.75" text-anchor="end">144 B</text>
+<path d="M 115 247.5 H 1115" stroke="#e2e8f0"/>
+<text class="tick" x="105" y="251.5" text-anchor="end">288 B</text>
+<path d="M 115 196.25 H 1115" stroke="#e2e8f0"/>
+<text class="tick" x="105" y="200.25" text-anchor="end">432 B</text>
+<path d="M 115 145 H 1115" stroke="#e2e8f0"/>
+<text class="tick" x="105" y="149" text-anchor="end">576 B</text>
+<path d="M 115 145 V 350" stroke="#e2e8f0"/>
+<text class="tick" x="115" y="369" text-anchor="middle">0</text>
+<path d="M 315 145 V 350" stroke="#e2e8f0"/>
+<text class="tick" x="315" y="369" text-anchor="middle">1</text>
+<path d="M 515 145 V 350" stroke="#e2e8f0"/>
+<text class="tick" x="515" y="369" text-anchor="middle">2</text>
+<path d="M 715 145 V 350" stroke="#e2e8f0"/>
+<text class="tick" x="715" y="369" text-anchor="middle">3</text>
+<path d="M 915 145 V 350" stroke="#e2e8f0"/>
+<text class="tick" x="915" y="369" text-anchor="middle">4</text>
+<text class="tick" x="615" y="391" text-anchor="middle">Execution step (last cell retains final outputs)</text>
+<rect class="bar" data-panel="0" data-tensor="0" x="115.0000" y="258.8889" width="400.0000" height="91.1111" fill="#2563eb" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T0 INPUT 1x64 | lifetime [0,1] | offset 0 B | padded 256 B | inputs None/None</title></rect>
+<text x="315.0000" y="308.4444" text-anchor="middle" font-size="11" style="fill:white;pointer-events:none">T0</text>
+<rect class="bar" data-panel="0" data-tensor="1" x="315.0000" y="213.3333" width="400.0000" height="45.5556" fill="#0d9488" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T1 DENSE 1x32 | lifetime [1,2] | offset 256 B | padded 128 B | inputs 0/None</title></rect>
+<text x="515.0000" y="240.1111" text-anchor="middle" font-size="11" style="fill:white;pointer-events:none">T1</text>
+<rect class="bar" data-panel="0" data-tensor="2" x="515.0000" y="167.7778" width="400.0000" height="45.5556" fill="#d97706" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T2 RELU 1x32 | lifetime [2,3] | offset 384 B | padded 128 B | inputs 1/None</title></rect>
+<text x="715.0000" y="194.5556" text-anchor="middle" font-size="11" style="fill:white;pointer-events:none">T2</text>
+<rect class="bar" data-panel="0" data-tensor="3" x="715.0000" y="145.0000" width="400.0000" height="22.7778" fill="#9333ea" fill-opacity=".78" stroke="#111827" stroke-width="2"><title>T3 DENSE 1x10 | lifetime [3,4] | offset 512 B | padded 64 B | inputs 2/None | pinned output</title></rect>
+<text x="915.0000" y="160.3889" text-anchor="middle" font-size="11" style="fill:white;pointer-events:none">T3</text>
+<text x="40" y="420" font-size="17" font-weight="700">Reused buffers — SAME byte scale as separate</text>
+<rect x="115" y="440" width="1000" height="205" fill="white" stroke="#cbd5e1"/>
+<path d="M 115 645 H 1115" stroke="#e2e8f0"/>
+<text class="tick" x="105" y="649" text-anchor="end">0 B</text>
+<path d="M 115 593.75 H 1115" stroke="#e2e8f0"/>
+<text class="tick" x="105" y="597.75" text-anchor="end">144 B</text>
+<path d="M 115 542.5 H 1115" stroke="#e2e8f0"/>
+<text class="tick" x="105" y="546.5" text-anchor="end">288 B</text>
+<path d="M 115 491.25 H 1115" stroke="#e2e8f0"/>
+<text class="tick" x="105" y="495.25" text-anchor="end">432 B</text>
+<path d="M 115 440 H 1115" stroke="#e2e8f0"/>
+<text class="tick" x="105" y="444" text-anchor="end">576 B</text>
+<path d="M 115 440 V 645" stroke="#e2e8f0"/>
+<text class="tick" x="115" y="664" text-anchor="middle">0</text>
+<path d="M 315 440 V 645" stroke="#e2e8f0"/>
+<text class="tick" x="315" y="664" text-anchor="middle">1</text>
+<path d="M 515 440 V 645" stroke="#e2e8f0"/>
+<text class="tick" x="515" y="664" text-anchor="middle">2</text>
+<path d="M 715 440 V 645" stroke="#e2e8f0"/>
+<text class="tick" x="715" y="664" text-anchor="middle">3</text>
+<path d="M 915 440 V 645" stroke="#e2e8f0"/>
+<text class="tick" x="915" y="664" text-anchor="middle">4</text>
+<text class="tick" x="615" y="686" text-anchor="middle">Execution step (last cell retains final outputs)</text>
+<rect class="bar" data-panel="1" data-tensor="0" x="115.0000" y="553.8889" width="400.0000" height="91.1111" fill="#2563eb" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T0 INPUT 1x64 | lifetime [0,1] | offset 0 B | padded 256 B | inputs None/None</title></rect>
+<text x="315.0000" y="603.4444" text-anchor="middle" font-size="11" style="fill:white;pointer-events:none">T0</text>
+<rect class="bar" data-panel="1" data-tensor="1" x="315.0000" y="508.3333" width="400.0000" height="45.5556" fill="#0d9488" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T1 DENSE 1x32 | lifetime [1,2] | offset 256 B | padded 128 B | inputs 0/None</title></rect>
+<text x="515.0000" y="535.1111" text-anchor="middle" font-size="11" style="fill:white;pointer-events:none">T1</text>
+<rect class="bar" data-panel="1" data-tensor="2" x="515.0000" y="599.4444" width="400.0000" height="45.5556" fill="#d97706" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T2 RELU 1x32 | lifetime [2,3] | offset 0 B | padded 128 B | inputs 1/None</title></rect>
+<text x="715.0000" y="626.2222" text-anchor="middle" font-size="11" style="fill:white;pointer-events:none">T2</text>
+<rect class="bar" data-panel="1" data-tensor="3" x="715.0000" y="576.6667" width="400.0000" height="22.7778" fill="#9333ea" fill-opacity=".78" stroke="#111827" stroke-width="2"><title>T3 DENSE 1x10 | lifetime [3,4] | offset 128 B | padded 64 B | inputs 2/None | pinned output</title></rect>
+<text x="915.0000" y="592.0556" text-anchor="middle" font-size="11" style="fill:white;pointer-events:none">T3</text>
+<text x="40" y="715" font-size="17" font-weight="700">Reused detail — INDEPENDENT byte scale (read axis labels)</text>
+<rect x="115" y="735" width="1000" height="205" fill="white" stroke="#cbd5e1"/>
+<path d="M 115 940 H 1115" stroke="#e2e8f0"/>
+<text class="tick" x="105" y="944" text-anchor="end">0 B</text>
+<path d="M 115 888.75 H 1115" stroke="#e2e8f0"/>
+<text class="tick" x="105" y="892.75" text-anchor="end">96 B</text>
+<path d="M 115 837.5 H 1115" stroke="#e2e8f0"/>
+<text class="tick" x="105" y="841.5" text-anchor="end">192 B</text>
+<path d="M 115 786.25 H 1115" stroke="#e2e8f0"/>
+<text class="tick" x="105" y="790.25" text-anchor="end">288 B</text>
+<path d="M 115 735 H 1115" stroke="#e2e8f0"/>
+<text class="tick" x="105" y="739" text-anchor="end">384 B</text>
+<path d="M 115 735 V 940" stroke="#e2e8f0"/>
+<text class="tick" x="115" y="959" text-anchor="middle">0</text>
+<path d="M 315 735 V 940" stroke="#e2e8f0"/>
+<text class="tick" x="315" y="959" text-anchor="middle">1</text>
+<path d="M 515 735 V 940" stroke="#e2e8f0"/>
+<text class="tick" x="515" y="959" text-anchor="middle">2</text>
+<path d="M 715 735 V 940" stroke="#e2e8f0"/>
+<text class="tick" x="715" y="959" text-anchor="middle">3</text>
+<path d="M 915 735 V 940" stroke="#e2e8f0"/>
+<text class="tick" x="915" y="959" text-anchor="middle">4</text>
+<text class="tick" x="615" y="981" text-anchor="middle">Execution step (last cell retains final outputs)</text>
+<rect class="bar" data-panel="2" data-tensor="0" x="115.0000" y="803.3333" width="400.0000" height="136.6667" fill="#2563eb" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T0 INPUT 1x64 | lifetime [0,1] | offset 0 B | padded 256 B | inputs None/None</title></rect>
+<text x="315.0000" y="875.6667" text-anchor="middle" font-size="11" style="fill:white;pointer-events:none">T0</text>
+<rect class="bar" data-panel="2" data-tensor="1" x="315.0000" y="735.0000" width="400.0000" height="68.3333" fill="#0d9488" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T1 DENSE 1x32 | lifetime [1,2] | offset 256 B | padded 128 B | inputs 0/None</title></rect>
+<text x="515.0000" y="773.1667" text-anchor="middle" font-size="11" style="fill:white;pointer-events:none">T1</text>
+<rect class="bar" data-panel="2" data-tensor="2" x="515.0000" y="871.6667" width="400.0000" height="68.3333" fill="#d97706" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T2 RELU 1x32 | lifetime [2,3] | offset 0 B | padded 128 B | inputs 1/None</title></rect>
+<text x="715.0000" y="909.8333" text-anchor="middle" font-size="11" style="fill:white;pointer-events:none">T2</text>
+<rect class="bar" data-panel="2" data-tensor="3" x="715.0000" y="837.5000" width="400.0000" height="34.1667" fill="#9333ea" fill-opacity=".78" stroke="#111827" stroke-width="2"><title>T3 DENSE 1x10 | lifetime [3,4] | offset 128 B | padded 64 B | inputs 2/None | pinned output</title></rect>
+<text x="915.0000" y="858.5833" text-anchor="middle" font-size="11" style="fill:white;pointer-events:none">T3</text>
+<text x="40" y="1040" font-size="13">Tensor arena only. Graph/weights, plan metadata, planner scratch, allocator overhead and process RSS are separate.</text>
+<text x="40" y="1062" font-size="13">The greedy heuristic can exceed the live-byte lower bound; this chart does not claim global optimality.</text></svg>

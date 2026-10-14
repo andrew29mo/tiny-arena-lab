@@ -1,3 +1,6 @@
 * text=auto eol=lf
 results/published/**/*.json linguist-generated=true
 docs/figures/*.svg linguist-generated=true
+examples/digits/model.json linguist-generated=true
+examples/digits/fixture.json linguist-generated=true
+examples/digits/*.svg linguist-generated=true
