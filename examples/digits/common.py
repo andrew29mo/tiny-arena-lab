@@ -25,7 +25,9 @@ def load_artifacts(model_path=None,fixture_path=None):
     rt.require(f['model_sha256']==digest(model_path) and f['dataset_sha256']==m['dataset_sha256'],
                'model/dataset provenance mismatch')
     rt.require(m['seed']==20261014 and m['preprocessing']=='float32(pixel / 16)' and
-        not m['training_parameters']['early_stopping'] and m['training_parameters']['solver']=='adam', 'training policy')
+        all(m['training_parameters'][key]==value for key,value in dict(early_stopping=False,
+            solver='adam',activation='relu',hidden_layer_sizes=[32],random_state=20261014,
+            max_iter=1500,tol=1e-5,n_iter_no_change=30).items()), 'training policy')
     rt.require(len(m['train_ids'])==1347 and len(m['test_ids'])==450 and
         sorted(m['train_ids']+m['test_ids'])==list(range(1797)) and f['test_ids']==m['test_ids'],'split overlap/coverage')
     rt.require(len(f['train_image_sha256'])==1347 and len(f['pixels'])==len(f['labels'])==
@@ -65,7 +67,11 @@ def library(path=ROOT/'build/digits/engine.so'):
     lib.ta_run.argtypes=[C.POINTER(rt.Graph),C.POINTER(rt.Plan),C.c_void_p,rt.S,C.POINTER(rt.P),rt.SP,rt.S,rt.OBS,C.c_void_p]
     lib.ta_run.restype=C.c_int
     lib.digits_graph.argtypes=[rt.S,C.POINTER(rt.Graph),C.POINTER(rt.Node),rt.SP]
+    lib.digits_graph.restype=None
+    lib.digits_inputs.argtypes=[]
     lib.digits_inputs.restype=rt.P
+    lib.digits_labels.argtypes=[]
+    lib.digits_labels.restype=C.POINTER(C.c_ubyte)
     return lib
 
 

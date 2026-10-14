@@ -38,26 +38,39 @@ static void observed(size_t id,const float *data,size_t count,void *context) {
 }
 /* Includes batch packing/zero-padding, input copy, validation, kernels, finite
  * checks and argmax/checksum. No Python/allocator/observer/JSON in timed passes. */
-static size_t pass(const ta_graph *g,const ta_plan *p,unsigned char *arena,size_t cap,
+typedef struct { size_t correct,rows,calls; uint64_t fingerprint; } pass_result;
+static pass_result pass(const ta_graph *g,const ta_plan *p,unsigned char *arena,size_t cap,
                    float *saved,int *predictions) {
-    size_t batch=g->nodes[0].rows,correct=0;
+    size_t batch=g->nodes[0].rows;
+    pass_result result={0,0,0,UINT64_C(14695981039346656037)};
     float input[batch*64];const float *inputs[]={input};size_t counts[]={batch*64};
     for(size_t start=0;start<DIGITS_COUNT;start+=batch) {
         size_t rows=DIGITS_COUNT-start<batch?DIGITS_COUNT-start:batch;
         memset(input,0,sizeof(input));memcpy(input,digits_inputs()+start*64,rows*64*sizeof(float));
         need(ta_run(g,p,arena,cap,inputs,counts,1,NULL,NULL)==TA_OK,"production inference");
+        ++result.calls;
         const float *y=(const float *)(arena+p->offset[3]);
         for(size_t i=0;i<rows;++i) {
             size_t best=0;
             for(size_t j=1;j<10;++j) if(y[i*10+j]>y[i*10+best]) best=j;
-            correct+=best==digits_labels()[start+i];
+            result.correct+=best==digits_labels()[start+i];++result.rows;
+            result.fingerprint^=(uint64_t)best;result.fingerprint*=UINT64_C(1099511628211);
+            result.fingerprint^=(uint64_t)(start+i);result.fingerprint*=UINT64_C(1099511628211);
+            for(size_t j=0;j<10;++j) {
+                uint32_t bits;memcpy(&bits,y+i*10+j,sizeof(bits));
+                result.fingerprint^=bits;result.fingerprint*=UINT64_C(1099511628211);
+            }
             if(saved) memcpy(saved+(start+i)*10,y+i*10,10*sizeof(float));
             if(predictions) predictions[start+i]=(int)best;
         }
     }
-    return correct;
+    return result;
 }
-typedef struct {size_t sample,batch,mode,kind;uint64_t elapsed;} timing;
+static void check_pass(pass_result actual,pass_result expected) {
+    need(actual.correct==expected.correct && actual.rows==expected.rows && actual.calls==expected.calls &&
+         actual.fingerprint==expected.fingerprint,"pass coverage/output fingerprint mismatch");
+}
+typedef struct {size_t sample,batch,mode,kind,verified_passes,valid_rows,kernel_calls,plans_built;uint64_t elapsed;} timing;
 int main(int argc,char **argv) {
     need(argc==3,"run samples");char *end;
     size_t run=(size_t)strtoull(argv[1],&end,10);need(*end=='\0' && run<24,"run");
@@ -68,7 +81,7 @@ int main(int argc,char **argv) {
     for(size_t order=0;order<2;++order) {
         size_t batch=(order+run)%2?16:1,budget=batch==1?512:7168;
         ta_graph g;ta_node nodes[4];size_t output;digits_graph(batch,&g,nodes,&output);
-        ta_plan plans[2];ta_scratch scratch;unsigned char *allocations[2],*arenas[2];
+        ta_plan plans[2];pass_result expected[2];ta_scratch scratch;unsigned char *allocations[2],*arenas[2];
         unsigned char *limited=aligned_alloc(64,budget+128);need(limited!=NULL,"budget allocation");
         printf("%s{\"batch\":%zu,\"budget_bytes\":%zu,\"budget_request_bytes\":%zu,\"budget_usable_bytes\":%zu,\"plan_bytes\":%zu,\"scratch_bytes\":%zu,\"weight_bytes\":%zu,\"graph_bytes\":%zu,\"input_buffer_bytes\":%zu,\"modes\":[",order?",":"",batch,budget,budget+128,usable(limited),sizeof(ta_plan),sizeof(ta_scratch),digits_weight_bytes(),sizeof(g)+sizeof(nodes)+sizeof(output),batch*64*sizeof(float));
         for(size_t mode=0;mode<2;++mode) {
@@ -82,37 +95,56 @@ int main(int argc,char **argv) {
             } else need(status==TA_OK && seen==4,"reuse fits budget");
             need(guarded(limited,budget),"budget guard");
             float budget_logits[DIGITS_COUNT*10];
-            size_t budget_correct=mode==1?pass(&g,p,limited+64,budget,budget_logits,NULL):0;
+            pass_result budget_result={0,0,0,0};
+            if(mode==1) budget_result=pass(&g,p,limited+64,budget,budget_logits,NULL);
             need(guarded(limited,budget),"whole-test budget guard");
             allocations[mode]=aligned_alloc(64,p->arena_bytes+128);need(allocations[mode]!=NULL,"timing arena");
             memset(allocations[mode],0xa5,p->arena_bytes+128);arenas[mode]=allocations[mode]+64;
             float logits[DIGITS_COUNT*10];int predictions[DIGITS_COUNT];
-            size_t correct=pass(&g,p,arenas[mode],p->arena_bytes,logits,predictions);
+            expected[mode]=pass(&g,p,arenas[mode],p->arena_bytes,logits,predictions);
+            need(expected[mode].rows==DIGITS_COUNT && expected[mode].calls==(DIGITS_COUNT+batch-1)/batch,
+                 "captured pass coverage mismatch");
             need(guarded(allocations[mode],p->arena_bytes),"timing arena guard");
-            if(mode==1) need(budget_correct==correct && memcmp(budget_logits,logits,sizeof(logits))==0,"budget outputs mismatch");
+            if(mode==1) {
+                check_pass(budget_result,expected[mode]);
+                need(memcmp(budget_logits,logits,sizeof(logits))==0,"budget outputs mismatch");
+            }
             size_t fixed=sizeof(ta_plan)+sizeof(ta_scratch)+digits_weight_bytes()+sizeof(g)+sizeof(nodes)+sizeof(output)+sizeof(input);
-            printf("%s{\"mode\":%zu,\"arena_bytes\":%zu,\"allocation_request_bytes\":%zu,\"allocator_usable_bytes\":%zu,\"budget_status\":%d,\"budget_observed_tensors\":%zu,\"rejection_untouched\":%s,\"guard_ok\":true,\"correct\":%zu,\"budget_correct\":%zu,\"accounted_bytes\":%zu,\"accounted_budget_bytes\":%zu,\"predictions\":[",mode?",":"",mode,p->arena_bytes,p->arena_bytes+128,usable(allocations[mode]),status,seen,mode==0?"true":"false",correct,budget_correct,fixed+p->arena_bytes,fixed+budget);
+            printf("%s{\"mode\":%zu,\"arena_bytes\":%zu,\"allocation_request_bytes\":%zu,\"allocator_usable_bytes\":%zu,\"budget_status\":%d,\"budget_observed_tensors\":%zu,\"rejection_untouched\":%s,\"guard_ok\":true,\"correct\":%zu,\"budget_correct\":%zu,\"accounted_bytes\":%zu,\"accounted_budget_bytes\":%zu,\"predictions\":[",mode?",":"",mode,p->arena_bytes,p->arena_bytes+128,usable(allocations[mode]),status,seen,mode==0?"true":"false",expected[mode].correct,budget_result.correct,fixed+p->arena_bytes,fixed+budget);
             for(size_t i=0;i<DIGITS_COUNT;++i) printf("%s%d",i?",":"",predictions[i]);
-            printf("],\"logits\":[");for(size_t i=0;i<DIGITS_COUNT*10;++i) printf("%s%.9g",i?",":"",(double)logits[i]);printf("]}");
-            for(size_t warm=0;warm<2;++warm) sink+=pass(&g,p,arenas[mode],p->arena_bytes,NULL,NULL);
+            printf("],\"valid_rows\":%zu,\"kernel_calls\":%zu,\"computed_rows\":%zu,\"fingerprint\":\"%016" PRIx64 "\",\"logits\":[",expected[mode].rows,expected[mode].calls,expected[mode].calls*batch,expected[mode].fingerprint);for(size_t i=0;i<DIGITS_COUNT*10;++i) printf("%s%.9g",i?",":"",(double)logits[i]);printf("]}");
+            for(size_t warm=0;warm<2;++warm) {
+                pass_result actual=pass(&g,p,arenas[mode],p->arena_bytes,NULL,NULL);
+                check_pass(actual,expected[mode]);sink+=actual.correct;
+            }
         }
         printf("]}");
         for(size_t sample=0;sample<samples;++sample) for(size_t pos=0;pos<2;++pos) {
             size_t mode=(pos+sample+run)%2;
             for(size_t kind=0;kind<2;++kind) {
+                pass_result results[4]={{0,0,0,0}};size_t planned=0;
                 uint64_t begin=now();
                 if(kind==0) for(size_t rep=0;rep<1024;++rep) {
-                    ta_plan p;need(ta_plan_build(&g,(ta_mode)mode,&p,&scratch)==TA_OK,"timed plan");sink^=p.arena_bytes;
-                } else for(size_t rep=0;rep<4;++rep) sink+=pass(&g,&plans[mode],arenas[mode],plans[mode].arena_bytes,NULL,NULL);
+                    ta_plan p;need(ta_plan_build(&g,(ta_mode)mode,&p,&scratch)==TA_OK,"timed plan");sink^=p.arena_bytes;++planned;
+                } else for(size_t rep=0;rep<4;++rep) {
+                    results[rep]=pass(&g,&plans[mode],arenas[mode],plans[mode].arena_bytes,NULL,NULL);
+                    sink+=results[rep].correct;
+                }
                 uint64_t elapsed=now()-begin;need(elapsed>0,"positive time");
-                timings[nt++]=(timing){sample,batch,mode,kind,elapsed};
+                size_t verified=0,valid_rows=0,kernel_calls=0;
+                if(kind==0) need(planned==1024,"planning call count mismatch");
+                else for(size_t rep=0;rep<4;++rep) {
+                    check_pass(results[rep],expected[mode]);++verified;
+                    valid_rows+=results[rep].rows;kernel_calls+=results[rep].calls;
+                }
+                timings[nt++]=(timing){sample,batch,mode,kind,verified,valid_rows,kernel_calls,planned,elapsed};
             }
         }
         for(size_t mode=0;mode<2;++mode) {need(guarded(allocations[mode],plans[mode].arena_bytes),"timed guards");free(allocations[mode]);}
         free(limited);
     }
     printf("],\"raw\":[");for(size_t i=0;i<nt;++i) {
-        timing t=timings[i];printf("%s{\"sample\":%zu,\"batch\":%zu,\"mode\":%zu,\"kind\":%zu,\"elapsed_ns\":%" PRIu64 "}",i?",":"",t.sample,t.batch,t.mode,t.kind,t.elapsed);
+        timing t=timings[i];printf("%s{\"sample\":%zu,\"batch\":%zu,\"mode\":%zu,\"kind\":%zu,\"elapsed_ns\":%" PRIu64 ",\"verified_passes\":%zu,\"valid_rows\":%zu,\"kernel_calls\":%zu,\"plans_built\":%zu}",i?",":"",t.sample,t.batch,t.mode,t.kind,t.elapsed,t.verified_passes,t.valid_rows,t.kernel_calls,t.plans_built);
     }
     printf("],\"sink\":%zu}\n",(size_t)sink);return 0;
 }

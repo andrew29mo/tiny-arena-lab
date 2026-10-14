@@ -62,6 +62,14 @@ def schedule(run_id,samples):
         for sample in range(samples) for pos in range(2) for kind in range(2)]
 
 
+def fingerprint(logits,predictions):
+    value=14695981039346656037
+    for i,prediction in enumerate(predictions):
+        bits=struct.unpack('<10I',struct.pack('<10f',*logits[i*10:(i+1)*10]))
+        for token in [prediction,i]+list(bits):value=((value^token)*1099511628211)&((1<<64)-1)
+    return '%016x'%value
+
+
 def verify_run(r,checks,run_id,samples):
     _,f=cm.load_artifacts()
     rt.require(r['run']==run_id and r['samples']==samples and r['planning_repetitions']==1024 and
@@ -90,14 +98,23 @@ def verify_run(r,checks,run_id,samples):
             pred=[max(range(10),key=lambda j:p['logits'][i*10+j]) for i in range(450)]
             rt.require(pred==p['predictions']==f['reference_predictions'] and
                 p['correct']==ref['correct'] and p['budget_correct']==(0 if mode==0 else ref['correct']),'actual accuracy mismatch')
+            rt.require(p['valid_rows']==450 and p['kernel_calls']==math.ceil(450/batch) and
+                p['computed_rows']==math.ceil(450/batch)*batch and
+                p['fingerprint']==fingerprint(p['logits'],p['predictions']),'captured pass coverage/fingerprint mismatch')
         rt.require(case['modes'][0]['logits']==case['modes'][1]['logits'],'C layouts final output mismatch')
     rt.require([(t['sample'],t['batch'],t['mode'],t['kind']) for t in r['raw']]==schedule(run_id,samples),'timing schedule mismatch')
     rt.require(all(type(t['elapsed_ns']) is int and t['elapsed_ns']>0 for t in r['raw']),'timing values')
+    for t in r['raw']:
+        inference=t['kind']==1
+        rt.require(t['verified_passes']==(4 if inference else 0) and
+            t['valid_rows']==(1800 if inference else 0) and
+            t['kernel_calls']==(4*math.ceil(450/t['batch']) if inference else 0) and
+            t['plans_built']==(0 if inference else 1024),'timed path work/coverage mismatch')
 
 
 def verify(directory,docs=False):
     directory=Path(directory);m=json.loads((directory/'manifest.json').read_text())
-    rt.require(m['schema']==1 and m['protocol']=='digits-fixed-arena-budget-v1' and
+    rt.require(m['schema']==1 and m['protocol']=='digits-fixed-arena-budget-v2' and
         type(m['runs']) is int and 1<=m['runs']<=24 and type(m['samples']) is int and 1<=m['samples']<=20,'manifest protocol')
     rt.require(re.fullmatch('[0-9a-f]{40}',m['source_revision']) and set(m['sources'])==set(run.SOURCES),'source inventory')
     for name,sha in m['sources'].items():

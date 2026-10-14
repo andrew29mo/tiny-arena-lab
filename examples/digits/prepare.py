@@ -14,6 +14,10 @@ HERE=Path(__file__).resolve().parent
 
 def fixture():
     model=json.loads((HERE/'model.json').read_text());d=load_digits()
+    expected=MLPClassifier(hidden_layer_sizes=(32,),activation='relu',solver='adam',
+        max_iter=1500,random_state=20261014,early_stopping=False,tol=1e-5,n_iter_no_change=30)
+    if model['training_parameters']!=json.loads(json.dumps(expected.get_params())):
+        raise ValueError('recorded training policy differs from fixed upstream policy')
     raw=d.data.astype('<f4');labels=d.target.astype('<i4')
     digest=hashlib.sha256(raw.tobytes()+labels.tobytes()).hexdigest()
     if digest!=model['dataset_sha256']:raise ValueError('dataset provenance mismatch')

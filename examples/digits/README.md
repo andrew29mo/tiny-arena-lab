@@ -16,7 +16,7 @@ python3 examples/digits/run.py sanitize
 # Commit all measurement sources first; output directory must not exist.
 python3 examples/digits/run.py measure --output results/local/my-digits
 python3 examples/digits/verify.py results/local/my-digits
-python3 examples/digits/verify.py results/published/digits-budget-20261014 --docs
+python3 examples/digits/verify.py results/published/digits-budget-reviewed-20261014 --docs
 ```
 
 Optional independent dataset/sklearn check (no training):
@@ -33,6 +33,7 @@ The committed model is reused unchanged from tiny-infer-lab; see [provenance,
 licenses and dataset attribution](NOTICE.md). The original training used only
 1,347 training images, fixed pixel/16 normalization, seed 20261014, Adam and
 training-loss convergence, with no test-set early stopping or parameter search.
+The installed sklearn check also verifies the full recorded training policy.
 Its recorded 450 test images have already been evaluated by the upstream project;
 this experiment checks transfer into this engine, not a newly unseen accuracy
 benchmark. The existing 94% accuracy floor is preserved, not tuned here.
@@ -43,7 +44,7 @@ train/test, restores the recorded float32 weights into sklearn's documented MLP
 attributes, and compares predict_proba to the original trained model export.
 It exports NumPy logits and sklearn classes for all test rows. It does not fit.
 Normal tests audit disjoint/complete indices, training-image hashes, artifact
-hashes and every C parameter, then check every intermediate against independent
+hashes, the exact C input/label arrays and every C parameter, then check every intermediate against independent
 Python float64 fsum and final logits/classes against those references. Both
 layouts must agree bitwise at every intermediate. No Python pickle is loaded.
 
@@ -115,14 +116,19 @@ valid example in a full-test pass (including final-batch padding):
 Process ranges overlap; these observations demonstrate budget feasibility, not a
 reliable inference speedup. Small planning differences are near host timing
 variation. Exact samples, clock resolution and process ranges are retained in
-the [manifest](../../results/published/digits-budget-20261014/manifest.json);
-[correctness evidence](../../results/published/digits-budget-20261014/correctness.json)
+the [manifest](../../results/published/digits-budget-reviewed-20261014/manifest.json);
+[correctness evidence](../../results/published/digits-budget-reviewed-20261014/correctness.json)
 includes every intermediate, actual address offsets and all 450 final logits.
 
 ![Batch 16 actual allocation comparison](batch-16.svg)
 
 The [batch 1 diagram](batch-1.svg) is also available. These diagrams show tensor
 arena storage only, with the first two panels sharing the same byte scale.
+
+The [review](REVIEW.md) documents the timed-path validation gap and its compiled
+regression tests. The original v1 [measurement archive](../../results/published/digits-budget-20261014/manifest.json)
+retains source `edfce00`; v2 includes fingerprint/counter work and supersedes its
+current timing claims. Results across these protocols are not a speed comparison.
 
 ## Timing interpretation
 
@@ -132,7 +138,8 @@ Real CLOCK_MONOTONIC intervals inside C measure two distinct quantities:
   1,024 repetitions per group, with status/loop/volatile-sink overhead.
 - Warm full-test passes with prebuilt plans, four passes per group, normalized by
   450 valid examples. Includes packing, zero-padding, input copying, per-inference
-  plan validation, numerical checks, dense/ReLU kernels, argmax and checksum.
+  plan validation, numerical checks, dense/ReLU kernels, argmax, work counters and
+  a fingerprint of every valid row index, class and all ten float32 logits.
   Excludes normalization, allocation, Python, observers, output capture and JSON.
 
 Separate's inference timing uses an adequately sized arena. Its capacity rejection
@@ -142,5 +149,9 @@ are measured in fixed plan-then-inference order. Both modes are warmed up. No CP
 affinity or frequency isolation is imposed. Process ranges are observed variation,
 not confidence intervals, and these host timings are not MCU performance claims.
 Correctness is checked with observation enabled; actual C benchmark passes have no
-observer. Raw logits, labels, coverage, actual intermediate/address records,
+observer. Every timed NULL-output pass must match the captured reference pass in
+row/call counts, accuracy and its output fingerprint. Those comparisons occur
+after the timer stops; fingerprint calculation and counter updates are timed.
+Raw inference groups record four verified passes, 1,800 valid rows and the actual
+kernel-call count; planning groups record 1,024 completed builds. Raw logits, labels, coverage, actual intermediate/address records,
 allocator observations, source/build hashes and unrounded timings accompany results.

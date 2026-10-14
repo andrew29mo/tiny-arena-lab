@@ -25,7 +25,9 @@ class RealModelTests(unittest.TestCase):
         def overlap(m,f):m['test_ids'][0]=m['train_ids'][0]
         def duplicate(m,f):f['train_image_sha256'][0]=hashlib.sha256(bytes(f['pixels'][0])).hexdigest()
         def nonfinite(m,f):m['weights'][0][0][0]=float('inf')
-        for change in [overlap,duplicate,nonfinite,lambda m,f:f['pixels'][0].__setitem__(0,17)]:
+        for change in [overlap,duplicate,nonfinite,lambda m,f:f['pixels'][0].__setitem__(0,17),
+                       lambda m,f:m['training_parameters'].update(activation='identity'),
+                       lambda m,f:m['training_parameters'].update(random_state=1)]:
             with tempfile.TemporaryDirectory() as tmp:
                 m,f=copy.deepcopy(model),copy.deepcopy(fixture);change(m,f)
                 mp,fp=Path(tmp)/'model.json',Path(tmp)/'fixture.json'
@@ -45,6 +47,46 @@ class RealModelTests(unittest.TestCase):
             subprocess.run(['cc','-shared',str(path/'execute.o')]+[str(run.BUILD/(n+'.o')) for n in
                 ('graph','planner','fixture')]+['-lm','-o',str(library)],check=True)
             with self.assertRaisesRegex(ValueError,'numerical mismatch'):run.correctness(cm.library(library))
+
+    def test_compiled_uncaptured_tail_output_and_planning_faults_rejected(self):
+        import subprocess
+        original=(HERE/'benchmark.c').read_text()
+        mutations=[
+            ('uncaptured_tail','for(size_t start=0;start<DIGITS_COUNT;start+=batch) {',
+             'for(size_t start=0;start<DIGITS_COUNT;start+=batch) {\n'
+             'if(!saved && batch==16 && start+batch>DIGITS_COUNT) break;',
+             'pass coverage/output fingerprint mismatch'),
+            ('uncaptured_row','for(size_t i=0;i<rows;++i) {',
+             'for(size_t i=0;i<rows;++i) {\nif(!saved && start+i==DIGITS_COUNT-1) continue;',
+             'pass coverage/output fingerprint mismatch'),
+            ('uncaptured_logit','const float *y=(const float *)(arena+p->offset[3]);',
+             'const float *y=(const float *)(arena+p->offset[3]);\nif(!saved) ((float *)y)[0]+=0.0001f;',
+             'pass coverage/output fingerprint mismatch'),
+            ('half_planning','for(size_t rep=0;rep<1024;++rep)',
+             'for(size_t rep=0;rep<512;++rep)','planning call count mismatch')]
+        with tempfile.TemporaryDirectory() as tmp:
+            for name,before,after,message in mutations:
+                with self.subTest(fault=name):
+                    self.assertEqual(original.count(before),1)
+                    source=Path(tmp)/(name+'.c');binary=Path(tmp)/name
+                    mutant=original.replace(before,after)
+                    if name.startswith('uncaptured_'):
+                        # Warmup remains correct: challenge the genuinely timed
+                        # NULL-output branch, not just pre-measurement checks.
+                        mutant=mutant.replace('typedef struct { size_t correct,rows,calls;',
+                            'static int measurement_active=0;\ntypedef struct { size_t correct,rows,calls;')
+                        mutant=mutant.replace('if(!saved', 'if(measurement_active && !saved')
+                        mutant=mutant.replace('uint64_t begin=now();',
+                            'measurement_active=(kind==1);\nuint64_t begin=now();')
+                        mutant=mutant.replace('uint64_t elapsed=now()-begin;',
+                            'uint64_t elapsed=now()-begin;measurement_active=0;')
+                    source.write_text(mutant)
+                    subprocess.run(['cc','-I'+str(ROOT/'include'),'-I'+str(HERE),'-I'+str(run.BUILD)]+
+                        cm.FLAGS+[str(source)]+[str(run.BUILD/(n+'.o')) for n in
+                        ('graph','planner','execute','fixture')]+['-lm','-o',str(binary)],check=True)
+                    result=subprocess.run([str(binary),'0','1'],capture_output=True,text=True)
+                    self.assertNotEqual(result.returncode,0)
+                    self.assertIn(message,result.stderr)
 
     def test_bad_capacity_before_writes_and_exact_minimum(self):
         lib=cm.library()
@@ -84,7 +126,10 @@ class RealModelTests(unittest.TestCase):
         changes=[lambda r:r['cases'][0]['modes'][0].update(budget_status=0),
                  lambda r:r['cases'][1]['modes'][1]['logits'].__setitem__(-1,9999),
                  lambda r:r['cases'][1]['modes'][1]['predictions'].pop(),
-                 lambda r:r['raw'].pop(),lambda r:r['cases'][0]['modes'][1].update(accounted_bytes=1)]
+                 lambda r:r['raw'].pop(),lambda r:r['cases'][0]['modes'][1].update(accounted_bytes=1),
+                 lambda r:r['raw'][1].update(valid_rows=1792),
+                 lambda r:r['raw'][0].update(plans_built=512),
+                 lambda r:r['cases'][1]['modes'][1].update(fingerprint='0'*16)]
         for change in changes:
             bad=copy.deepcopy(report);change(bad)
             with self.assertRaises((ValueError,KeyError)):verify_run(bad,checks,0,1)

@@ -30,7 +30,7 @@ jobs:
         run: |
           python examples/digits/run.py test
           python examples/digits/run.py sanitize
-          python examples/digits/verify.py results/published/digits-budget-20261014 --docs
+          python examples/digits/verify.py results/published/digits-budget-reviewed-20261014 --docs
       - name: Independent installed dataset and sklearn export reference
         run: |
           python -m pip install -r examples/digits/requirements.txt

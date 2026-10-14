@@ -49,6 +49,8 @@ def build(sanitize=False):
 
 def correctness(lib=None):
     model,f=cm.load_artifacts();lib=lib or cm.library();records={}
+    rt.require(list(lib.digits_inputs()[:450*64])==[v/16 for row in f['pixels'] for v in row] and
+        list(lib.digits_labels()[:450])==f['labels'],'actual C fixture inputs/labels differ')
     for batch,budget in cm.BATCHES.items():
         g,nodes,out=cm.graph(lib,batch);plans=[];arenas=[];predictions=[[],[]];logits=[[],[]];worst=[0.,0.]
         for mode in range(2):
@@ -137,7 +139,7 @@ def measure(output,runs,samples):
     if sys.platform=='darwin':
         q=subprocess.run(['sysctl','-n','machdep.cpu.brand_string'],capture_output=True,text=True)
         cpu=q.stdout.strip() if q.returncode==0 else None
-    cm.save(output/'manifest.json',dict(schema=1,protocol='digits-fixed-arena-budget-v1',source_revision=revision,
+    cm.save(output/'manifest.json',dict(schema=1,protocol='digits-fixed-arena-budget-v2',source_revision=revision,
         created_utc=dt.datetime.now(dt.timezone.utc).isoformat(),sources=sources,build=record,runs=runs,samples=samples,
         platform=dict(system=platform.system(),release=platform.release(),machine=platform.machine(),cpu=cpu),
         summaries=summaries(records),files={p.name:cm.digest(p) for p in output.glob('*.json')}))

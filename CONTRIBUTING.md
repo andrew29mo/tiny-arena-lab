@@ -6,7 +6,7 @@ Use a full clone so historical measurement source revisions are available.
 
 For the real digits example also run `python3 examples/digits/run.py test`,
 `python3 examples/digits/run.py sanitize` and
-`python3 examples/digits/verify.py results/published/digits-budget-20261014 --docs`.
+`python3 examples/digits/verify.py results/published/digits-budget-reviewed-20261014 --docs`.
 See its [protocol](examples/digits/README.md) for the optional installed sklearn
 reference check. Keep test-set accuracy, payload capacity, allocator usable bytes
 and accounted storage distinct; preserve all valid tail examples and timed padding.
