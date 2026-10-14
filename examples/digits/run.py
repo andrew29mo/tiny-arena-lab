@@ -4,6 +4,7 @@ import ctypes as C
 import datetime as dt
 import json
 import math
+import os
 from pathlib import Path
 import platform
 import statistics
@@ -34,7 +35,8 @@ def build(sanitize=False):
     BUILD.mkdir(parents=True,exist_ok=True);(BUILD/'digits_data.h').write_text(cm.header())
     for cmd in commands(sanitize):subprocess.run(cmd,cwd=ROOT,check=True)
     if sanitize:
-        subprocess.run([str(BUILD/'sanitize'),'0','1'],stdout=subprocess.DEVNULL,check=True)
+        subprocess.run([str(BUILD/'sanitize'),'0','1'],stdout=subprocess.DEVNULL,check=True,
+            env={**os.environ,'ASAN_OPTIONS':'halt_on_error=1','UBSAN_OPTIONS':'halt_on_error=1'})
         print('PASS: ASan/UBSan real-model capacity rejection, both layouts, every held-out example and tail')
         return
     subprocess.run([sys.executable,str(ROOT/'tests/check_no_heap.py')]+[
