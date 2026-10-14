@@ -1,0 +1,137 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1160" height="1080" viewBox="0 0 1160 1080" role="img" aria-labelledby="title desc">
+<title id="title">residual tensor lifetimes and arena layout</title>
+<desc id="desc">Separate and reused layouts share the first two byte axes. A third panel zooms reused storage. Lifetimes are inclusive; outputs are pinned.</desc>
+<rect width="1160" height="1080" fill="#f8fafc"/>
+<style>text{font-family:Arial,sans-serif;fill:#172033}.tick{font-size:12px;fill:#526176}.bar:hover{fill-opacity:1;stroke:#111827;stroke-width:2}</style>
+<text x="40" y="38" font-size="25" font-weight="700">residual · static arena layout</text>
+<text x="40" y="65" font-size="15">Separate 4352 B → reused 2560 B · 41.2% less tensor storage · live-byte lower bound 2560 B</text>
+<text x="40" y="90" font-size="13">64-byte aligned blocks · inclusive last-read lifetimes · pinned outputs have a dark border · hover for exact values</text>
+<text x="40" y="125" font-size="17" font-weight="700">Separate buffers — full byte scale</text>
+<rect x="115" y="145" width="1000" height="205" fill="white" stroke="#cbd5e1"/>
+<path d="M 115 350 H 1115" stroke="#e2e8f0"/>
+<text class="tick" x="105" y="354" text-anchor="end">0 B</text>
+<path d="M 115 298.75 H 1115" stroke="#e2e8f0"/>
+<text class="tick" x="105" y="302.75" text-anchor="end">1088 B</text>
+<path d="M 115 247.5 H 1115" stroke="#e2e8f0"/>
+<text class="tick" x="105" y="251.5" text-anchor="end">2176 B</text>
+<path d="M 115 196.25 H 1115" stroke="#e2e8f0"/>
+<text class="tick" x="105" y="200.25" text-anchor="end">3264 B</text>
+<path d="M 115 145 H 1115" stroke="#e2e8f0"/>
+<text class="tick" x="105" y="149" text-anchor="end">4352 B</text>
+<path d="M 115 145 V 350" stroke="#e2e8f0"/>
+<text class="tick" x="115" y="369" text-anchor="middle">0</text>
+<path d="M 240 145 V 350" stroke="#e2e8f0"/>
+<text class="tick" x="240" y="369" text-anchor="middle">1</text>
+<path d="M 365 145 V 350" stroke="#e2e8f0"/>
+<text class="tick" x="365" y="369" text-anchor="middle">2</text>
+<path d="M 490 145 V 350" stroke="#e2e8f0"/>
+<text class="tick" x="490" y="369" text-anchor="middle">3</text>
+<path d="M 615 145 V 350" stroke="#e2e8f0"/>
+<text class="tick" x="615" y="369" text-anchor="middle">4</text>
+<path d="M 740 145 V 350" stroke="#e2e8f0"/>
+<text class="tick" x="740" y="369" text-anchor="middle">5</text>
+<path d="M 865 145 V 350" stroke="#e2e8f0"/>
+<text class="tick" x="865" y="369" text-anchor="middle">6</text>
+<path d="M 990 145 V 350" stroke="#e2e8f0"/>
+<text class="tick" x="990" y="369" text-anchor="middle">7</text>
+<text class="tick" x="615" y="391" text-anchor="middle">Execution step (last cell retains final outputs)</text>
+<rect class="bar" data-panel="0" data-tensor="0" x="115.0000" y="325.8824" width="625.0000" height="24.1176" fill="#2563eb" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T0 INPUT 4x32 | lifetime [0,4] | offset 0 B | padded 512 B | inputs None/None</title></rect>
+<text x="427.5000" y="341.9412" text-anchor="middle" font-size="11" style="fill:white;pointer-events:none">T0</text>
+<rect class="bar" data-panel="0" data-tensor="1" x="240.0000" y="277.6471" width="250.0000" height="48.2353" fill="#0d9488" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T1 DENSE 4x64 | lifetime [1,2] | offset 512 B | padded 1024 B | inputs 0/None</title></rect>
+<text x="365.0000" y="305.7647" text-anchor="middle" font-size="11" style="fill:white;pointer-events:none">T1</text>
+<rect class="bar" data-panel="0" data-tensor="2" x="365.0000" y="229.4118" width="250.0000" height="48.2353" fill="#d97706" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T2 RELU 4x64 | lifetime [2,3] | offset 1536 B | padded 1024 B | inputs 1/None</title></rect>
+<text x="490.0000" y="257.5294" text-anchor="middle" font-size="11" style="fill:white;pointer-events:none">T2</text>
+<rect class="bar" data-panel="0" data-tensor="3" x="490.0000" y="205.2941" width="250.0000" height="24.1176" fill="#9333ea" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T3 DENSE 4x32 | lifetime [3,4] | offset 2560 B | padded 512 B | inputs 2/None</title></rect>
+<text x="615.0000" y="221.3529" text-anchor="middle" font-size="11" style="fill:white;pointer-events:none">T3</text>
+<rect class="bar" data-panel="0" data-tensor="4" x="615.0000" y="181.1765" width="250.0000" height="24.1176" fill="#dc2626" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T4 ADD 4x32 | lifetime [4,5] | offset 3072 B | padded 512 B | inputs 3/0</title></rect>
+<text x="740.0000" y="197.2353" text-anchor="middle" font-size="11" style="fill:white;pointer-events:none">T4</text>
+<rect class="bar" data-panel="0" data-tensor="5" x="740.0000" y="157.0588" width="250.0000" height="24.1176" fill="#0284c7" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T5 RELU 4x32 | lifetime [5,6] | offset 3584 B | padded 512 B | inputs 4/None</title></rect>
+<text x="865.0000" y="173.1176" text-anchor="middle" font-size="11" style="fill:white;pointer-events:none">T5</text>
+<rect class="bar" data-panel="0" data-tensor="6" x="865.0000" y="145.0000" width="250.0000" height="12.0588" fill="#65a30d" fill-opacity=".78" stroke="#111827" stroke-width="2"><title>T6 DENSE 4x16 | lifetime [6,7] | offset 4096 B | padded 256 B | inputs 5/None | pinned output</title></rect>
+<text x="40" y="420" font-size="17" font-weight="700">Reused buffers — SAME byte scale as separate</text>
+<rect x="115" y="440" width="1000" height="205" fill="white" stroke="#cbd5e1"/>
+<path d="M 115 645 H 1115" stroke="#e2e8f0"/>
+<text class="tick" x="105" y="649" text-anchor="end">0 B</text>
+<path d="M 115 593.75 H 1115" stroke="#e2e8f0"/>
+<text class="tick" x="105" y="597.75" text-anchor="end">1088 B</text>
+<path d="M 115 542.5 H 1115" stroke="#e2e8f0"/>
+<text class="tick" x="105" y="546.5" text-anchor="end">2176 B</text>
+<path d="M 115 491.25 H 1115" stroke="#e2e8f0"/>
+<text class="tick" x="105" y="495.25" text-anchor="end">3264 B</text>
+<path d="M 115 440 H 1115" stroke="#e2e8f0"/>
+<text class="tick" x="105" y="444" text-anchor="end">4352 B</text>
+<path d="M 115 440 V 645" stroke="#e2e8f0"/>
+<text class="tick" x="115" y="664" text-anchor="middle">0</text>
+<path d="M 240 440 V 645" stroke="#e2e8f0"/>
+<text class="tick" x="240" y="664" text-anchor="middle">1</text>
+<path d="M 365 440 V 645" stroke="#e2e8f0"/>
+<text class="tick" x="365" y="664" text-anchor="middle">2</text>
+<path d="M 490 440 V 645" stroke="#e2e8f0"/>
+<text class="tick" x="490" y="664" text-anchor="middle">3</text>
+<path d="M 615 440 V 645" stroke="#e2e8f0"/>
+<text class="tick" x="615" y="664" text-anchor="middle">4</text>
+<path d="M 740 440 V 645" stroke="#e2e8f0"/>
+<text class="tick" x="740" y="664" text-anchor="middle">5</text>
+<path d="M 865 440 V 645" stroke="#e2e8f0"/>
+<text class="tick" x="865" y="664" text-anchor="middle">6</text>
+<path d="M 990 440 V 645" stroke="#e2e8f0"/>
+<text class="tick" x="990" y="664" text-anchor="middle">7</text>
+<text class="tick" x="615" y="686" text-anchor="middle">Execution step (last cell retains final outputs)</text>
+<rect class="bar" data-panel="1" data-tensor="0" x="115.0000" y="524.4118" width="625.0000" height="24.1176" fill="#2563eb" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T0 INPUT 4x32 | lifetime [0,4] | offset 2048 B | padded 512 B | inputs None/None</title></rect>
+<text x="427.5000" y="540.4706" text-anchor="middle" font-size="11" style="fill:white;pointer-events:none">T0</text>
+<rect class="bar" data-panel="1" data-tensor="1" x="240.0000" y="596.7647" width="250.0000" height="48.2353" fill="#0d9488" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T1 DENSE 4x64 | lifetime [1,2] | offset 0 B | padded 1024 B | inputs 0/None</title></rect>
+<text x="365.0000" y="624.8824" text-anchor="middle" font-size="11" style="fill:white;pointer-events:none">T1</text>
+<rect class="bar" data-panel="1" data-tensor="2" x="365.0000" y="548.5294" width="250.0000" height="48.2353" fill="#d97706" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T2 RELU 4x64 | lifetime [2,3] | offset 1024 B | padded 1024 B | inputs 1/None</title></rect>
+<text x="490.0000" y="576.6471" text-anchor="middle" font-size="11" style="fill:white;pointer-events:none">T2</text>
+<rect class="bar" data-panel="1" data-tensor="3" x="490.0000" y="620.8824" width="250.0000" height="24.1176" fill="#9333ea" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T3 DENSE 4x32 | lifetime [3,4] | offset 0 B | padded 512 B | inputs 2/None</title></rect>
+<text x="615.0000" y="636.9412" text-anchor="middle" font-size="11" style="fill:white;pointer-events:none">T3</text>
+<rect class="bar" data-panel="1" data-tensor="4" x="615.0000" y="596.7647" width="250.0000" height="24.1176" fill="#dc2626" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T4 ADD 4x32 | lifetime [4,5] | offset 512 B | padded 512 B | inputs 3/0</title></rect>
+<text x="740.0000" y="612.8235" text-anchor="middle" font-size="11" style="fill:white;pointer-events:none">T4</text>
+<rect class="bar" data-panel="1" data-tensor="5" x="740.0000" y="620.8824" width="250.0000" height="24.1176" fill="#0284c7" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T5 RELU 4x32 | lifetime [5,6] | offset 0 B | padded 512 B | inputs 4/None</title></rect>
+<text x="865.0000" y="636.9412" text-anchor="middle" font-size="11" style="fill:white;pointer-events:none">T5</text>
+<rect class="bar" data-panel="1" data-tensor="6" x="865.0000" y="608.8235" width="250.0000" height="12.0588" fill="#65a30d" fill-opacity=".78" stroke="#111827" stroke-width="2"><title>T6 DENSE 4x16 | lifetime [6,7] | offset 512 B | padded 256 B | inputs 5/None | pinned output</title></rect>
+<text x="40" y="715" font-size="17" font-weight="700">Reused detail — INDEPENDENT byte scale (read axis labels)</text>
+<rect x="115" y="735" width="1000" height="205" fill="white" stroke="#cbd5e1"/>
+<path d="M 115 940 H 1115" stroke="#e2e8f0"/>
+<text class="tick" x="105" y="944" text-anchor="end">0 B</text>
+<path d="M 115 888.75 H 1115" stroke="#e2e8f0"/>
+<text class="tick" x="105" y="892.75" text-anchor="end">640 B</text>
+<path d="M 115 837.5 H 1115" stroke="#e2e8f0"/>
+<text class="tick" x="105" y="841.5" text-anchor="end">1280 B</text>
+<path d="M 115 786.25 H 1115" stroke="#e2e8f0"/>
+<text class="tick" x="105" y="790.25" text-anchor="end">1920 B</text>
+<path d="M 115 735 H 1115" stroke="#e2e8f0"/>
+<text class="tick" x="105" y="739" text-anchor="end">2560 B</text>
+<path d="M 115 735 V 940" stroke="#e2e8f0"/>
+<text class="tick" x="115" y="959" text-anchor="middle">0</text>
+<path d="M 240 735 V 940" stroke="#e2e8f0"/>
+<text class="tick" x="240" y="959" text-anchor="middle">1</text>
+<path d="M 365 735 V 940" stroke="#e2e8f0"/>
+<text class="tick" x="365" y="959" text-anchor="middle">2</text>
+<path d="M 490 735 V 940" stroke="#e2e8f0"/>
+<text class="tick" x="490" y="959" text-anchor="middle">3</text>
+<path d="M 615 735 V 940" stroke="#e2e8f0"/>
+<text class="tick" x="615" y="959" text-anchor="middle">4</text>
+<path d="M 740 735 V 940" stroke="#e2e8f0"/>
+<text class="tick" x="740" y="959" text-anchor="middle">5</text>
+<path d="M 865 735 V 940" stroke="#e2e8f0"/>
+<text class="tick" x="865" y="959" text-anchor="middle">6</text>
+<path d="M 990 735 V 940" stroke="#e2e8f0"/>
+<text class="tick" x="990" y="959" text-anchor="middle">7</text>
+<text class="tick" x="615" y="981" text-anchor="middle">Execution step (last cell retains final outputs)</text>
+<rect class="bar" data-panel="2" data-tensor="0" x="115.0000" y="735.0000" width="625.0000" height="41.0000" fill="#2563eb" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T0 INPUT 4x32 | lifetime [0,4] | offset 2048 B | padded 512 B | inputs None/None</title></rect>
+<text x="427.5000" y="759.5000" text-anchor="middle" font-size="11" style="fill:white;pointer-events:none">T0</text>
+<rect class="bar" data-panel="2" data-tensor="1" x="240.0000" y="858.0000" width="250.0000" height="82.0000" fill="#0d9488" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T1 DENSE 4x64 | lifetime [1,2] | offset 0 B | padded 1024 B | inputs 0/None</title></rect>
+<text x="365.0000" y="903.0000" text-anchor="middle" font-size="11" style="fill:white;pointer-events:none">T1</text>
+<rect class="bar" data-panel="2" data-tensor="2" x="365.0000" y="776.0000" width="250.0000" height="82.0000" fill="#d97706" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T2 RELU 4x64 | lifetime [2,3] | offset 1024 B | padded 1024 B | inputs 1/None</title></rect>
+<text x="490.0000" y="821.0000" text-anchor="middle" font-size="11" style="fill:white;pointer-events:none">T2</text>
+<rect class="bar" data-panel="2" data-tensor="3" x="490.0000" y="899.0000" width="250.0000" height="41.0000" fill="#9333ea" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T3 DENSE 4x32 | lifetime [3,4] | offset 0 B | padded 512 B | inputs 2/None</title></rect>
+<text x="615.0000" y="923.5000" text-anchor="middle" font-size="11" style="fill:white;pointer-events:none">T3</text>
+<rect class="bar" data-panel="2" data-tensor="4" x="615.0000" y="858.0000" width="250.0000" height="41.0000" fill="#dc2626" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T4 ADD 4x32 | lifetime [4,5] | offset 512 B | padded 512 B | inputs 3/0</title></rect>
+<text x="740.0000" y="882.5000" text-anchor="middle" font-size="11" style="fill:white;pointer-events:none">T4</text>
+<rect class="bar" data-panel="2" data-tensor="5" x="740.0000" y="899.0000" width="250.0000" height="41.0000" fill="#0284c7" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T5 RELU 4x32 | lifetime [5,6] | offset 0 B | padded 512 B | inputs 4/None</title></rect>
+<text x="865.0000" y="923.5000" text-anchor="middle" font-size="11" style="fill:white;pointer-events:none">T5</text>
+<rect class="bar" data-panel="2" data-tensor="6" x="865.0000" y="878.5000" width="250.0000" height="20.5000" fill="#65a30d" fill-opacity=".78" stroke="#111827" stroke-width="2"><title>T6 DENSE 4x16 | lifetime [6,7] | offset 512 B | padded 256 B | inputs 5/None | pinned output</title></rect>
+<text x="990.0000" y="892.7500" text-anchor="middle" font-size="11" style="fill:white;pointer-events:none">T6</text>
+<text x="40" y="1040" font-size="13">Tensor arena only. Graph/weights, plan metadata, planner scratch, allocator overhead and process RSS are separate.</text>
+<text x="40" y="1062" font-size="13">The greedy heuristic can exceed the live-byte lower bound; this chart does not claim global optimality.</text></svg>

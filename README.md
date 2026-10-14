@@ -49,8 +49,44 @@ fork and residual-stack examples preserve visible gaps above that bound.
 
 ## Measurements
 
-Selected real measurements and figures are added after sources are committed
-and the persisted reports pass verification. No savings or speedup is assumed.
+Measured source: `b149010`, Apple M5 Pro, Darwin 27 arm64, Apple Clang 21.0.0.
+Each of six fresh processes measures 20 groups of 1,024 complete plans per mode
+and graph, after warmup. Times below are medians of process medians; raw samples
+and process ranges are in the [measurement manifest](results/published/host-20261014/manifest.json).
+
+| Graph | Separate arena (B) | Reused arena (B) | Live lower bound (B) | Separate plan (µs) | Reuse plan (µs) |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| chain | 1920 | 768 | 768 | 0.172 | 0.211 |
+| residual | 4352 | 2560 | 2560 | 0.127 | 0.159 |
+| fork_outputs | 1984 | 896 | 832 | 0.126 | 0.167 |
+| residual_stack | 12416 | 768 | 640 | 5.147 | 6.950 |
+
+Reuse saves tensor storage on these graphs and costs more planning time. Both
+modes also require **4128 B of plan metadata** and **4096 B of explicit scratch**
+on this host. Those fixed costs do not shrink with the arena. Neither the arena
+table nor arena + metadata + scratch represents whole-process memory usage.
+The heuristic does not reach the live-byte lower bound on every graph.
+
+The first measured process also records actual guarded allocation requests and
+host allocator usable sizes below. Requests include 128 B of boundary guards;
+usable size can exceed the request. These figures exclude plan/scratch, weights
+and host fixture storage, and are not RSS. All processes retain their own records.
+
+| Allocation graph | Separate request (B) | Separate usable (B) | Reuse request (B) | Reuse usable (B) |
+| --- | ---: | ---: | ---: | ---: |
+| chain | 2048 | 2048 | 896 | 896 |
+| residual | 4480 | 5120 | 2688 | 3072 |
+| fork_outputs | 2112 | 2560 | 1024 | 1024 |
+| residual_stack | 12544 | 14336 | 896 | 896 |
+
+[Correctness evidence](results/published/host-20261014/correctness.json) includes
+every actual intermediate and final output. The [allocation viewer](docs/figures/index.html)
+can be downloaded with its SVG files and opened locally; GitHub displays the HTML
+source. Individual SVGs can be viewed directly. The first two panels share a byte
+scale; the third explicitly zooms reused storage. Hover a block for its exact
+tensor, lifetime, offset and padded size. Dark borders mark pinned outputs.
+
+![Fork graph: separate and reused tensor storage](docs/figures/fork_outputs.svg)
 
 ## What memory and time mean
 

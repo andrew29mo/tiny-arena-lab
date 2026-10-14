@@ -1,0 +1,329 @@
+{
+  "schema": 1,
+  "protocol": "static-arena-inclusive-lifetimes-v1",
+  "created_utc": "2026-10-14T08:43:07.320339+00:00",
+  "source_revision": "b14901032afc0bb271fa38432608808e62c7a024",
+  "sources": {
+    "include/tiny_arena.h": "effb63c6473e9dc37b9061bfae7bde7e8c044b468197b04665128bc0788e0e58",
+    "src/internal.h": "33802bd7df9acabda5143b9bddcb4f0db8cbc891a989ff54a3f8bdee648da975",
+    "src/graph.c": "d45f673d6331f6a9f1edad3f031583feb98cdd303515aee82a1850815c203c93",
+    "src/planner.c": "7bd3fe9c14df2cb8a3eb159e4a6e33fc14e81adacff6af191bf0f9020091fc94",
+    "src/execute.c": "fa235b8a6a553c4ed5e14ddfbada45baf785e6fa5a05e793cd4b4f9d3f5c5e5f",
+    "tools/workloads.h": "48a62fde41d2f30128be3f86dbafaf21e6521c36dd50ddd1c0ba82eef7093516",
+    "tools/workloads.c": "6694965a26fa9bf3d0a10aa34250003b9ef30af47fcaf363dab04431ecd4fd38",
+    "tools/benchmark.c": "2e13557088405fcd09b3892c1d2b1f0f74c0fdb8161caca539f66e65c93af183",
+    "tools/runtime.py": "5a1cab2e5cc7c43e4610e96c864dc8d8469e9657e2019efb8b0bfbaff768a0c3",
+    "tools/run_benchmark.py": "652c8f68d21da818476b2ba1614b4940e204152a79256b535f8e2227a0625a7a",
+    "tools/verify_report.py": "325842c0002300338e78daa65803ca0451e3df8d97a541390c5371dfebe5bc26",
+    "tools/visualize.py": "d11ad3fa5e67e2b87e34d8456a67a2f5609f53bb49d3332342dddea9ca5b355e",
+    "tests/test_native.c": "4021222cd4ce15d4be5323d9e024b1f47c6b54544b830a78cf8c8251990eb019",
+    "tests/test_planner.py": "eac5b1ffecf201eaf01a031126eed7b3213878d52f3fd7dc756744626c4c47e2",
+    "tests/test_reporting.py": "7b8fee7d65307f6a75f7f16990203e13757588767059329fb6c5767fe16f0737",
+    "tests/test_mutations.py": "cf1eee861e5f4a42b107ada6947b1a99bd74ab547149f8684bc5da0a8a45c913",
+    "tests/check_no_heap.py": "981fa812a7e09cbab0123a7b34c69b119140ef1d66ce736220b8c1efedd45d76",
+    "Makefile": "ff2c30ed698dbbb528326b37f7e78b22c5dc6a35e571d471c71f52308264f0a6"
+  },
+  "build": {
+    "sources": {
+      "include/tiny_arena.h": "effb63c6473e9dc37b9061bfae7bde7e8c044b468197b04665128bc0788e0e58",
+      "src/internal.h": "33802bd7df9acabda5143b9bddcb4f0db8cbc891a989ff54a3f8bdee648da975",
+      "src/graph.c": "d45f673d6331f6a9f1edad3f031583feb98cdd303515aee82a1850815c203c93",
+      "src/planner.c": "7bd3fe9c14df2cb8a3eb159e4a6e33fc14e81adacff6af191bf0f9020091fc94",
+      "src/execute.c": "fa235b8a6a553c4ed5e14ddfbada45baf785e6fa5a05e793cd4b4f9d3f5c5e5f",
+      "tools/workloads.h": "48a62fde41d2f30128be3f86dbafaf21e6521c36dd50ddd1c0ba82eef7093516",
+      "tools/workloads.c": "6694965a26fa9bf3d0a10aa34250003b9ef30af47fcaf363dab04431ecd4fd38",
+      "tools/benchmark.c": "2e13557088405fcd09b3892c1d2b1f0f74c0fdb8161caca539f66e65c93af183",
+      "tools/runtime.py": "5a1cab2e5cc7c43e4610e96c864dc8d8469e9657e2019efb8b0bfbaff768a0c3",
+      "tools/run_benchmark.py": "652c8f68d21da818476b2ba1614b4940e204152a79256b535f8e2227a0625a7a",
+      "tools/verify_report.py": "325842c0002300338e78daa65803ca0451e3df8d97a541390c5371dfebe5bc26",
+      "tools/visualize.py": "d11ad3fa5e67e2b87e34d8456a67a2f5609f53bb49d3332342dddea9ca5b355e",
+      "tests/test_native.c": "4021222cd4ce15d4be5323d9e024b1f47c6b54544b830a78cf8c8251990eb019",
+      "tests/test_planner.py": "eac5b1ffecf201eaf01a031126eed7b3213878d52f3fd7dc756744626c4c47e2",
+      "tests/test_reporting.py": "7b8fee7d65307f6a75f7f16990203e13757588767059329fb6c5767fe16f0737",
+      "tests/test_mutations.py": "cf1eee861e5f4a42b107ada6947b1a99bd74ab547149f8684bc5da0a8a45c913",
+      "tests/check_no_heap.py": "981fa812a7e09cbab0123a7b34c69b119140ef1d66ce736220b8c1efedd45d76",
+      "Makefile": "ff2c30ed698dbbb528326b37f7e78b22c5dc6a35e571d471c71f52308264f0a6"
+    },
+    "commands": [
+      [
+        "cc",
+        "-Iinclude",
+        "-Isrc",
+        "-Itools",
+        "-std=c11",
+        "-O3",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-Werror",
+        "-ffp-contract=off",
+        "-fPIC",
+        "-c",
+        "src/graph.c",
+        "-o",
+        "build/graph.o"
+      ],
+      [
+        "cc",
+        "-Iinclude",
+        "-Isrc",
+        "-Itools",
+        "-std=c11",
+        "-O3",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-Werror",
+        "-ffp-contract=off",
+        "-fPIC",
+        "-c",
+        "src/planner.c",
+        "-o",
+        "build/planner.o"
+      ],
+      [
+        "cc",
+        "-Iinclude",
+        "-Isrc",
+        "-Itools",
+        "-std=c11",
+        "-O3",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-Werror",
+        "-ffp-contract=off",
+        "-fPIC",
+        "-c",
+        "src/execute.c",
+        "-o",
+        "build/execute.o"
+      ],
+      [
+        "cc",
+        "-Iinclude",
+        "-Isrc",
+        "-Itools",
+        "-std=c11",
+        "-O3",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-Werror",
+        "-ffp-contract=off",
+        "-fPIC",
+        "-c",
+        "tools/workloads.c",
+        "-o",
+        "build/workloads.o"
+      ],
+      [
+        "cc",
+        "-shared",
+        "build/graph.o",
+        "build/planner.o",
+        "build/execute.o",
+        "build/workloads.o",
+        "-lm",
+        "-o",
+        "build/libtiny_arena.so"
+      ],
+      [
+        "cc",
+        "-Iinclude",
+        "-Isrc",
+        "-Itools",
+        "-std=c11",
+        "-O3",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-Werror",
+        "-ffp-contract=off",
+        "tools/benchmark.c",
+        "build/graph.o",
+        "build/planner.o",
+        "build/execute.o",
+        "build/workloads.o",
+        "-lm",
+        "-o",
+        "build/benchmark"
+      ],
+      [
+        "cc",
+        "-Iinclude",
+        "-Isrc",
+        "-Itools",
+        "-std=c11",
+        "-O3",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-Werror",
+        "-ffp-contract=off",
+        "tests/test_native.c",
+        "build/graph.o",
+        "build/planner.o",
+        "build/execute.o",
+        "build/workloads.o",
+        "-lm",
+        "-o",
+        "build/test_native"
+      ]
+    ],
+    "compiler": "Apple clang version 21.0.0 (clang-2100.3.34.2)",
+    "objects": {
+      "build/graph.o": "fac0bbdf04cdf4e7cabd5fe993709d078e00b25ba087a8a9bd2f58e042b6a52e",
+      "build/planner.o": "9fe3f888e7cec6e35b2ed3ac96d6984b7cd273669569aaf0bfae564a69091870",
+      "build/execute.o": "5d0be3621bd7d6917dfcf6fda7575e2ff107ec9235e015b916f383774ae9f121",
+      "build/workloads.o": "602b4261cbf9a698c9243bbfd8907a87dbeb6895c4ff1d198a46576a7c1e2f7e"
+    },
+    "binaries": {
+      "build/libtiny_arena.so": "75c9d955b9cfbf77b3faec8e8ef7b0e8e6bb429dfcb6b8315614b7cdd3c4d954",
+      "build/benchmark": "32b8ef04b46793d118ea881c3ccf6db310b6095010b36b0e23603de62fec5305",
+      "build/test_native": "b021cc7d9b930586a6b2acb7f63a181b39b3f3eae4f3ce0aa0a759a86f90c873"
+    }
+  },
+  "runs": 6,
+  "samples": 20,
+  "repetitions": 1024,
+  "timer": "C CLOCK_MONOTONIC; complete plan build/validation plus loop and volatile sink",
+  "python": "3.9.6",
+  "platform": {
+    "system": "Darwin",
+    "release": "27.0.0",
+    "machine": "arm64",
+    "cpu": "Apple M5 Pro"
+  },
+  "abi": {
+    "size_t_bytes": 8,
+    "node_bytes": 72,
+    "graph_bytes": 32,
+    "plan_bytes": 4128,
+    "scratch_bytes": 4096,
+    "alignment": 64
+  },
+  "summaries": {
+    "chain": {
+      "separate": {
+        "median_ns": 171.630859375,
+        "process_medians_ns": [
+          169.921875,
+          177.24609375,
+          173.828125,
+          170.41015625,
+          172.8515625,
+          168.9453125
+        ],
+        "minimum_ns": 168.9453125,
+        "maximum_ns": 177.24609375
+      },
+      "reuse": {
+        "median_ns": 211.181640625,
+        "process_medians_ns": [
+          211.9140625,
+          212.890625,
+          211.42578125,
+          210.9375,
+          209.47265625,
+          205.078125
+        ],
+        "minimum_ns": 205.078125,
+        "maximum_ns": 212.890625
+      }
+    },
+    "residual": {
+      "separate": {
+        "median_ns": 126.708984375,
+        "process_medians_ns": [
+          126.46484375,
+          126.953125,
+          132.8125,
+          124.0234375,
+          128.90625,
+          125.0
+        ],
+        "minimum_ns": 124.0234375,
+        "maximum_ns": 132.8125
+      },
+      "reuse": {
+        "median_ns": 159.1796875,
+        "process_medians_ns": [
+          156.73828125,
+          160.15625,
+          164.0625,
+          158.203125,
+          170.41015625,
+          158.203125
+        ],
+        "minimum_ns": 156.73828125,
+        "maximum_ns": 170.41015625
+      }
+    },
+    "fork_outputs": {
+      "separate": {
+        "median_ns": 126.220703125,
+        "process_medians_ns": [
+          126.953125,
+          128.90625,
+          128.41796875,
+          120.60546875,
+          125.48828125,
+          124.0234375
+        ],
+        "minimum_ns": 120.60546875,
+        "maximum_ns": 128.90625
+      },
+      "reuse": {
+        "median_ns": 167.48046875,
+        "process_medians_ns": [
+          168.9453125,
+          175.29296875,
+          171.875,
+          160.64453125,
+          166.015625,
+          166.015625
+        ],
+        "minimum_ns": 160.64453125,
+        "maximum_ns": 175.29296875
+      }
+    },
+    "residual_stack": {
+      "separate": {
+        "median_ns": 5146.728515625,
+        "process_medians_ns": [
+          5240.72265625,
+          5164.55078125,
+          5164.0625,
+          5129.39453125,
+          5114.2578125,
+          5073.73046875
+        ],
+        "minimum_ns": 5073.73046875,
+        "maximum_ns": 5240.72265625
+      },
+      "reuse": {
+        "median_ns": 6949.951171875,
+        "process_medians_ns": [
+          7066.89453125,
+          7006.8359375,
+          6950.68359375,
+          6949.21875,
+          6931.15234375,
+          6916.50390625
+        ],
+        "minimum_ns": 6916.50390625,
+        "maximum_ns": 7066.89453125
+      }
+    }
+  },
+  "files": {
+    "run-05.json": "1f3849592498956860d41f2bd845d5edf3ec15d5e14023de033383c8c08e2389",
+    "run-04.json": "24afb790667300be0710aaf588e5857e6dbebb8bb595062a558fb2db64c78607",
+    "correctness.json": "410f2d77e07957adebe97b63b5aec82eecfa34c0a920d075d221aa421c8aef98",
+    "run-03.json": "a13e568d0130100e6ee836bfb805d8f7345a81648f8880b7fa5bbfaca38cb4ac",
+    "run-02.json": "14a8312293b0ddc0051822ff47c067e8b0708fdd68af81a83adbef40088dcb05",
+    "run-01.json": "2bcb44153e12547bdca4ce8744f9415af129b6b40a34115ae73024424e2e3e99",
+    "run-00.json": "bda1ecdf12f2c44679504a3e8890cb7ba3643b222ebe6adce9ff2889c5c0e466"
+  }
+}

@@ -1,0 +1,326 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1160" height="1080" viewBox="0 0 1160 1080" role="img" aria-labelledby="title desc">
+<title id="title">residual_stack tensor lifetimes and arena layout</title>
+<desc id="desc">Separate and reused layouts share the first two byte axes. A third panel zooms reused storage. Lifetimes are inclusive; outputs are pinned.</desc>
+<rect width="1160" height="1080" fill="#f8fafc"/>
+<style>text{font-family:Arial,sans-serif;fill:#172033}.tick{font-size:12px;fill:#526176}.bar:hover{fill-opacity:1;stroke:#111827;stroke-width:2}</style>
+<text x="40" y="38" font-size="25" font-weight="700">residual_stack · static arena layout</text>
+<text x="40" y="65" font-size="15">Separate 12416 B → reused 768 B · 93.8% less tensor storage · live-byte lower bound 640 B</text>
+<text x="40" y="90" font-size="13">64-byte aligned blocks · inclusive last-read lifetimes · pinned outputs have a dark border · hover for exact values</text>
+<text x="40" y="125" font-size="17" font-weight="700">Separate buffers — full byte scale</text>
+<rect x="115" y="145" width="1000" height="205" fill="white" stroke="#cbd5e1"/>
+<path d="M 115 350 H 1115" stroke="#e2e8f0"/>
+<text class="tick" x="105" y="354" text-anchor="end">0 B</text>
+<path d="M 115 298.75 H 1115" stroke="#e2e8f0"/>
+<text class="tick" x="105" y="302.75" text-anchor="end">3104 B</text>
+<path d="M 115 247.5 H 1115" stroke="#e2e8f0"/>
+<text class="tick" x="105" y="251.5" text-anchor="end">6208 B</text>
+<path d="M 115 196.25 H 1115" stroke="#e2e8f0"/>
+<text class="tick" x="105" y="200.25" text-anchor="end">9312 B</text>
+<path d="M 115 145 H 1115" stroke="#e2e8f0"/>
+<text class="tick" x="105" y="149" text-anchor="end">12416 B</text>
+<path d="M 115 145 V 350" stroke="#e2e8f0"/>
+<text class="tick" x="115" y="369" text-anchor="middle">0</text>
+<path d="M 221.061 145 V 350" stroke="#e2e8f0"/>
+<text class="tick" x="221.061" y="369" text-anchor="middle">7</text>
+<path d="M 327.121 145 V 350" stroke="#e2e8f0"/>
+<text class="tick" x="327.121" y="369" text-anchor="middle">14</text>
+<path d="M 433.182 145 V 350" stroke="#e2e8f0"/>
+<text class="tick" x="433.182" y="369" text-anchor="middle">21</text>
+<path d="M 539.242 145 V 350" stroke="#e2e8f0"/>
+<text class="tick" x="539.242" y="369" text-anchor="middle">28</text>
+<path d="M 645.303 145 V 350" stroke="#e2e8f0"/>
+<text class="tick" x="645.303" y="369" text-anchor="middle">35</text>
+<path d="M 751.364 145 V 350" stroke="#e2e8f0"/>
+<text class="tick" x="751.364" y="369" text-anchor="middle">42</text>
+<path d="M 857.424 145 V 350" stroke="#e2e8f0"/>
+<text class="tick" x="857.424" y="369" text-anchor="middle">49</text>
+<path d="M 963.485 145 V 350" stroke="#e2e8f0"/>
+<text class="tick" x="963.485" y="369" text-anchor="middle">56</text>
+<path d="M 1069.55 145 V 350" stroke="#e2e8f0"/>
+<text class="tick" x="1069.55" y="369" text-anchor="middle">63</text>
+<path d="M 1099.85 145 V 350" stroke="#e2e8f0"/>
+<text class="tick" x="1099.85" y="369" text-anchor="middle">65</text>
+<text class="tick" x="615" y="391" text-anchor="middle">Execution step (last cell retains final outputs)</text>
+<rect class="bar" data-panel="0" data-tensor="0" x="115.0000" y="347.8866" width="75.7576" height="2.1134" fill="#2563eb" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T0 INPUT 1x32 | lifetime [0,4] | offset 0 B | padded 128 B | inputs None/None</title></rect>
+<rect class="bar" data-panel="0" data-tensor="1" x="130.1515" y="343.6598" width="30.3030" height="4.2268" fill="#0d9488" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T1 DENSE 1x64 | lifetime [1,2] | offset 128 B | padded 256 B | inputs 0/None</title></rect>
+<rect class="bar" data-panel="0" data-tensor="2" x="145.3030" y="339.4330" width="30.3030" height="4.2268" fill="#d97706" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T2 RELU 1x64 | lifetime [2,3] | offset 384 B | padded 256 B | inputs 1/None</title></rect>
+<rect class="bar" data-panel="0" data-tensor="3" x="160.4545" y="337.3196" width="30.3030" height="2.1134" fill="#9333ea" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T3 DENSE 1x32 | lifetime [3,4] | offset 640 B | padded 128 B | inputs 2/None</title></rect>
+<rect class="bar" data-panel="0" data-tensor="4" x="175.6061" y="335.2062" width="75.7576" height="2.1134" fill="#dc2626" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T4 ADD 1x32 | lifetime [4,8] | offset 768 B | padded 128 B | inputs 3/0</title></rect>
+<rect class="bar" data-panel="0" data-tensor="5" x="190.7576" y="330.9794" width="30.3030" height="4.2268" fill="#0284c7" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T5 DENSE 1x64 | lifetime [5,6] | offset 896 B | padded 256 B | inputs 4/None</title></rect>
+<rect class="bar" data-panel="0" data-tensor="6" x="205.9091" y="326.7526" width="30.3030" height="4.2268" fill="#65a30d" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T6 RELU 1x64 | lifetime [6,7] | offset 1152 B | padded 256 B | inputs 5/None</title></rect>
+<rect class="bar" data-panel="0" data-tensor="7" x="221.0606" y="324.6392" width="30.3030" height="2.1134" fill="#db2777" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T7 DENSE 1x32 | lifetime [7,8] | offset 1408 B | padded 128 B | inputs 6/None</title></rect>
+<rect class="bar" data-panel="0" data-tensor="8" x="236.2121" y="322.5258" width="75.7576" height="2.1134" fill="#2563eb" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T8 ADD 1x32 | lifetime [8,12] | offset 1536 B | padded 128 B | inputs 7/4</title></rect>
+<rect class="bar" data-panel="0" data-tensor="9" x="251.3636" y="318.2990" width="30.3030" height="4.2268" fill="#0d9488" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T9 DENSE 1x64 | lifetime [9,10] | offset 1664 B | padded 256 B | inputs 8/None</title></rect>
+<rect class="bar" data-panel="0" data-tensor="10" x="266.5152" y="314.0722" width="30.3030" height="4.2268" fill="#d97706" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T10 RELU 1x64 | lifetime [10,11] | offset 1920 B | padded 256 B | inputs 9/None</title></rect>
+<rect class="bar" data-panel="0" data-tensor="11" x="281.6667" y="311.9588" width="30.3030" height="2.1134" fill="#9333ea" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T11 DENSE 1x32 | lifetime [11,12] | offset 2176 B | padded 128 B | inputs 10/None</title></rect>
+<rect class="bar" data-panel="0" data-tensor="12" x="296.8182" y="309.8454" width="75.7576" height="2.1134" fill="#dc2626" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T12 ADD 1x32 | lifetime [12,16] | offset 2304 B | padded 128 B | inputs 11/8</title></rect>
+<rect class="bar" data-panel="0" data-tensor="13" x="311.9697" y="305.6186" width="30.3030" height="4.2268" fill="#0284c7" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T13 DENSE 1x64 | lifetime [13,14] | offset 2432 B | padded 256 B | inputs 12/None</title></rect>
+<rect class="bar" data-panel="0" data-tensor="14" x="327.1212" y="301.3918" width="30.3030" height="4.2268" fill="#65a30d" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T14 RELU 1x64 | lifetime [14,15] | offset 2688 B | padded 256 B | inputs 13/None</title></rect>
+<rect class="bar" data-panel="0" data-tensor="15" x="342.2727" y="299.2784" width="30.3030" height="2.1134" fill="#db2777" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T15 DENSE 1x32 | lifetime [15,16] | offset 2944 B | padded 128 B | inputs 14/None</title></rect>
+<rect class="bar" data-panel="0" data-tensor="16" x="357.4242" y="297.1649" width="75.7576" height="2.1134" fill="#2563eb" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T16 ADD 1x32 | lifetime [16,20] | offset 3072 B | padded 128 B | inputs 15/12</title></rect>
+<rect class="bar" data-panel="0" data-tensor="17" x="372.5758" y="292.9381" width="30.3030" height="4.2268" fill="#0d9488" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T17 DENSE 1x64 | lifetime [17,18] | offset 3200 B | padded 256 B | inputs 16/None</title></rect>
+<rect class="bar" data-panel="0" data-tensor="18" x="387.7273" y="288.7113" width="30.3030" height="4.2268" fill="#d97706" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T18 RELU 1x64 | lifetime [18,19] | offset 3456 B | padded 256 B | inputs 17/None</title></rect>
+<rect class="bar" data-panel="0" data-tensor="19" x="402.8788" y="286.5979" width="30.3030" height="2.1134" fill="#9333ea" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T19 DENSE 1x32 | lifetime [19,20] | offset 3712 B | padded 128 B | inputs 18/None</title></rect>
+<rect class="bar" data-panel="0" data-tensor="20" x="418.0303" y="284.4845" width="75.7576" height="2.1134" fill="#dc2626" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T20 ADD 1x32 | lifetime [20,24] | offset 3840 B | padded 128 B | inputs 19/16</title></rect>
+<rect class="bar" data-panel="0" data-tensor="21" x="433.1818" y="280.2577" width="30.3030" height="4.2268" fill="#0284c7" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T21 DENSE 1x64 | lifetime [21,22] | offset 3968 B | padded 256 B | inputs 20/None</title></rect>
+<rect class="bar" data-panel="0" data-tensor="22" x="448.3333" y="276.0309" width="30.3030" height="4.2268" fill="#65a30d" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T22 RELU 1x64 | lifetime [22,23] | offset 4224 B | padded 256 B | inputs 21/None</title></rect>
+<rect class="bar" data-panel="0" data-tensor="23" x="463.4848" y="273.9175" width="30.3030" height="2.1134" fill="#db2777" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T23 DENSE 1x32 | lifetime [23,24] | offset 4480 B | padded 128 B | inputs 22/None</title></rect>
+<rect class="bar" data-panel="0" data-tensor="24" x="478.6364" y="271.8041" width="75.7576" height="2.1134" fill="#2563eb" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T24 ADD 1x32 | lifetime [24,28] | offset 4608 B | padded 128 B | inputs 23/20</title></rect>
+<rect class="bar" data-panel="0" data-tensor="25" x="493.7879" y="267.5773" width="30.3030" height="4.2268" fill="#0d9488" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T25 DENSE 1x64 | lifetime [25,26] | offset 4736 B | padded 256 B | inputs 24/None</title></rect>
+<rect class="bar" data-panel="0" data-tensor="26" x="508.9394" y="263.3505" width="30.3030" height="4.2268" fill="#d97706" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T26 RELU 1x64 | lifetime [26,27] | offset 4992 B | padded 256 B | inputs 25/None</title></rect>
+<rect class="bar" data-panel="0" data-tensor="27" x="524.0909" y="261.2371" width="30.3030" height="2.1134" fill="#9333ea" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T27 DENSE 1x32 | lifetime [27,28] | offset 5248 B | padded 128 B | inputs 26/None</title></rect>
+<rect class="bar" data-panel="0" data-tensor="28" x="539.2424" y="259.1237" width="75.7576" height="2.1134" fill="#dc2626" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T28 ADD 1x32 | lifetime [28,32] | offset 5376 B | padded 128 B | inputs 27/24</title></rect>
+<rect class="bar" data-panel="0" data-tensor="29" x="554.3939" y="254.8969" width="30.3030" height="4.2268" fill="#0284c7" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T29 DENSE 1x64 | lifetime [29,30] | offset 5504 B | padded 256 B | inputs 28/None</title></rect>
+<rect class="bar" data-panel="0" data-tensor="30" x="569.5455" y="250.6701" width="30.3030" height="4.2268" fill="#65a30d" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T30 RELU 1x64 | lifetime [30,31] | offset 5760 B | padded 256 B | inputs 29/None</title></rect>
+<rect class="bar" data-panel="0" data-tensor="31" x="584.6970" y="248.5567" width="30.3030" height="2.1134" fill="#db2777" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T31 DENSE 1x32 | lifetime [31,32] | offset 6016 B | padded 128 B | inputs 30/None</title></rect>
+<rect class="bar" data-panel="0" data-tensor="32" x="599.8485" y="246.4433" width="75.7576" height="2.1134" fill="#2563eb" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T32 ADD 1x32 | lifetime [32,36] | offset 6144 B | padded 128 B | inputs 31/28</title></rect>
+<rect class="bar" data-panel="0" data-tensor="33" x="615.0000" y="242.2165" width="30.3030" height="4.2268" fill="#0d9488" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T33 DENSE 1x64 | lifetime [33,34] | offset 6272 B | padded 256 B | inputs 32/None</title></rect>
+<rect class="bar" data-panel="0" data-tensor="34" x="630.1515" y="237.9897" width="30.3030" height="4.2268" fill="#d97706" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T34 RELU 1x64 | lifetime [34,35] | offset 6528 B | padded 256 B | inputs 33/None</title></rect>
+<rect class="bar" data-panel="0" data-tensor="35" x="645.3030" y="235.8763" width="30.3030" height="2.1134" fill="#9333ea" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T35 DENSE 1x32 | lifetime [35,36] | offset 6784 B | padded 128 B | inputs 34/None</title></rect>
+<rect class="bar" data-panel="0" data-tensor="36" x="660.4545" y="233.7629" width="75.7576" height="2.1134" fill="#dc2626" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T36 ADD 1x32 | lifetime [36,40] | offset 6912 B | padded 128 B | inputs 35/32</title></rect>
+<rect class="bar" data-panel="0" data-tensor="37" x="675.6061" y="229.5361" width="30.3030" height="4.2268" fill="#0284c7" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T37 DENSE 1x64 | lifetime [37,38] | offset 7040 B | padded 256 B | inputs 36/None</title></rect>
+<rect class="bar" data-panel="0" data-tensor="38" x="690.7576" y="225.3093" width="30.3030" height="4.2268" fill="#65a30d" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T38 RELU 1x64 | lifetime [38,39] | offset 7296 B | padded 256 B | inputs 37/None</title></rect>
+<rect class="bar" data-panel="0" data-tensor="39" x="705.9091" y="223.1959" width="30.3030" height="2.1134" fill="#db2777" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T39 DENSE 1x32 | lifetime [39,40] | offset 7552 B | padded 128 B | inputs 38/None</title></rect>
+<rect class="bar" data-panel="0" data-tensor="40" x="721.0606" y="221.0825" width="75.7576" height="2.1134" fill="#2563eb" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T40 ADD 1x32 | lifetime [40,44] | offset 7680 B | padded 128 B | inputs 39/36</title></rect>
+<rect class="bar" data-panel="0" data-tensor="41" x="736.2121" y="216.8557" width="30.3030" height="4.2268" fill="#0d9488" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T41 DENSE 1x64 | lifetime [41,42] | offset 7808 B | padded 256 B | inputs 40/None</title></rect>
+<rect class="bar" data-panel="0" data-tensor="42" x="751.3636" y="212.6289" width="30.3030" height="4.2268" fill="#d97706" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T42 RELU 1x64 | lifetime [42,43] | offset 8064 B | padded 256 B | inputs 41/None</title></rect>
+<rect class="bar" data-panel="0" data-tensor="43" x="766.5152" y="210.5155" width="30.3030" height="2.1134" fill="#9333ea" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T43 DENSE 1x32 | lifetime [43,44] | offset 8320 B | padded 128 B | inputs 42/None</title></rect>
+<rect class="bar" data-panel="0" data-tensor="44" x="781.6667" y="208.4021" width="75.7576" height="2.1134" fill="#dc2626" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T44 ADD 1x32 | lifetime [44,48] | offset 8448 B | padded 128 B | inputs 43/40</title></rect>
+<rect class="bar" data-panel="0" data-tensor="45" x="796.8182" y="204.1753" width="30.3030" height="4.2268" fill="#0284c7" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T45 DENSE 1x64 | lifetime [45,46] | offset 8576 B | padded 256 B | inputs 44/None</title></rect>
+<rect class="bar" data-panel="0" data-tensor="46" x="811.9697" y="199.9485" width="30.3030" height="4.2268" fill="#65a30d" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T46 RELU 1x64 | lifetime [46,47] | offset 8832 B | padded 256 B | inputs 45/None</title></rect>
+<rect class="bar" data-panel="0" data-tensor="47" x="827.1212" y="197.8351" width="30.3030" height="2.1134" fill="#db2777" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T47 DENSE 1x32 | lifetime [47,48] | offset 9088 B | padded 128 B | inputs 46/None</title></rect>
+<rect class="bar" data-panel="0" data-tensor="48" x="842.2727" y="195.7216" width="75.7576" height="2.1134" fill="#2563eb" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T48 ADD 1x32 | lifetime [48,52] | offset 9216 B | padded 128 B | inputs 47/44</title></rect>
+<rect class="bar" data-panel="0" data-tensor="49" x="857.4242" y="191.4948" width="30.3030" height="4.2268" fill="#0d9488" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T49 DENSE 1x64 | lifetime [49,50] | offset 9344 B | padded 256 B | inputs 48/None</title></rect>
+<rect class="bar" data-panel="0" data-tensor="50" x="872.5758" y="187.2680" width="30.3030" height="4.2268" fill="#d97706" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T50 RELU 1x64 | lifetime [50,51] | offset 9600 B | padded 256 B | inputs 49/None</title></rect>
+<rect class="bar" data-panel="0" data-tensor="51" x="887.7273" y="185.1546" width="30.3030" height="2.1134" fill="#9333ea" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T51 DENSE 1x32 | lifetime [51,52] | offset 9856 B | padded 128 B | inputs 50/None</title></rect>
+<rect class="bar" data-panel="0" data-tensor="52" x="902.8788" y="183.0412" width="75.7576" height="2.1134" fill="#dc2626" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T52 ADD 1x32 | lifetime [52,56] | offset 9984 B | padded 128 B | inputs 51/48</title></rect>
+<rect class="bar" data-panel="0" data-tensor="53" x="918.0303" y="178.8144" width="30.3030" height="4.2268" fill="#0284c7" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T53 DENSE 1x64 | lifetime [53,54] | offset 10112 B | padded 256 B | inputs 52/None</title></rect>
+<rect class="bar" data-panel="0" data-tensor="54" x="933.1818" y="174.5876" width="30.3030" height="4.2268" fill="#65a30d" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T54 RELU 1x64 | lifetime [54,55] | offset 10368 B | padded 256 B | inputs 53/None</title></rect>
+<rect class="bar" data-panel="0" data-tensor="55" x="948.3333" y="172.4742" width="30.3030" height="2.1134" fill="#db2777" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T55 DENSE 1x32 | lifetime [55,56] | offset 10624 B | padded 128 B | inputs 54/None</title></rect>
+<rect class="bar" data-panel="0" data-tensor="56" x="963.4848" y="170.3608" width="75.7576" height="2.1134" fill="#2563eb" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T56 ADD 1x32 | lifetime [56,60] | offset 10752 B | padded 128 B | inputs 55/52</title></rect>
+<rect class="bar" data-panel="0" data-tensor="57" x="978.6364" y="166.1340" width="30.3030" height="4.2268" fill="#0d9488" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T57 DENSE 1x64 | lifetime [57,58] | offset 10880 B | padded 256 B | inputs 56/None</title></rect>
+<rect class="bar" data-panel="0" data-tensor="58" x="993.7879" y="161.9072" width="30.3030" height="4.2268" fill="#d97706" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T58 RELU 1x64 | lifetime [58,59] | offset 11136 B | padded 256 B | inputs 57/None</title></rect>
+<rect class="bar" data-panel="0" data-tensor="59" x="1008.9394" y="159.7938" width="30.3030" height="2.1134" fill="#9333ea" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T59 DENSE 1x32 | lifetime [59,60] | offset 11392 B | padded 128 B | inputs 58/None</title></rect>
+<rect class="bar" data-panel="0" data-tensor="60" x="1024.0909" y="157.6804" width="75.7576" height="2.1134" fill="#dc2626" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T60 ADD 1x32 | lifetime [60,64] | offset 11520 B | padded 128 B | inputs 59/56</title></rect>
+<rect class="bar" data-panel="0" data-tensor="61" x="1039.2424" y="153.4536" width="30.3030" height="4.2268" fill="#0284c7" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T61 DENSE 1x64 | lifetime [61,62] | offset 11648 B | padded 256 B | inputs 60/None</title></rect>
+<rect class="bar" data-panel="0" data-tensor="62" x="1054.3939" y="149.2268" width="30.3030" height="4.2268" fill="#65a30d" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T62 RELU 1x64 | lifetime [62,63] | offset 11904 B | padded 256 B | inputs 61/None</title></rect>
+<rect class="bar" data-panel="0" data-tensor="63" x="1069.5455" y="147.1134" width="30.3030" height="2.1134" fill="#db2777" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T63 DENSE 1x32 | lifetime [63,64] | offset 12160 B | padded 128 B | inputs 62/None</title></rect>
+<rect class="bar" data-panel="0" data-tensor="64" x="1084.6970" y="145.0000" width="30.3030" height="2.1134" fill="#2563eb" fill-opacity=".78" stroke="#111827" stroke-width="2"><title>T64 ADD 1x32 | lifetime [64,65] | offset 12288 B | padded 128 B | inputs 63/60 | pinned output</title></rect>
+<text x="40" y="420" font-size="17" font-weight="700">Reused buffers — SAME byte scale as separate</text>
+<rect x="115" y="440" width="1000" height="205" fill="white" stroke="#cbd5e1"/>
+<path d="M 115 645 H 1115" stroke="#e2e8f0"/>
+<text class="tick" x="105" y="649" text-anchor="end">0 B</text>
+<path d="M 115 593.75 H 1115" stroke="#e2e8f0"/>
+<text class="tick" x="105" y="597.75" text-anchor="end">3104 B</text>
+<path d="M 115 542.5 H 1115" stroke="#e2e8f0"/>
+<text class="tick" x="105" y="546.5" text-anchor="end">6208 B</text>
+<path d="M 115 491.25 H 1115" stroke="#e2e8f0"/>
+<text class="tick" x="105" y="495.25" text-anchor="end">9312 B</text>
+<path d="M 115 440 H 1115" stroke="#e2e8f0"/>
+<text class="tick" x="105" y="444" text-anchor="end">12416 B</text>
+<path d="M 115 440 V 645" stroke="#e2e8f0"/>
+<text class="tick" x="115" y="664" text-anchor="middle">0</text>
+<path d="M 221.061 440 V 645" stroke="#e2e8f0"/>
+<text class="tick" x="221.061" y="664" text-anchor="middle">7</text>
+<path d="M 327.121 440 V 645" stroke="#e2e8f0"/>
+<text class="tick" x="327.121" y="664" text-anchor="middle">14</text>
+<path d="M 433.182 440 V 645" stroke="#e2e8f0"/>
+<text class="tick" x="433.182" y="664" text-anchor="middle">21</text>
+<path d="M 539.242 440 V 645" stroke="#e2e8f0"/>
+<text class="tick" x="539.242" y="664" text-anchor="middle">28</text>
+<path d="M 645.303 440 V 645" stroke="#e2e8f0"/>
+<text class="tick" x="645.303" y="664" text-anchor="middle">35</text>
+<path d="M 751.364 440 V 645" stroke="#e2e8f0"/>
+<text class="tick" x="751.364" y="664" text-anchor="middle">42</text>
+<path d="M 857.424 440 V 645" stroke="#e2e8f0"/>
+<text class="tick" x="857.424" y="664" text-anchor="middle">49</text>
+<path d="M 963.485 440 V 645" stroke="#e2e8f0"/>
+<text class="tick" x="963.485" y="664" text-anchor="middle">56</text>
+<path d="M 1069.55 440 V 645" stroke="#e2e8f0"/>
+<text class="tick" x="1069.55" y="664" text-anchor="middle">63</text>
+<path d="M 1099.85 440 V 645" stroke="#e2e8f0"/>
+<text class="tick" x="1099.85" y="664" text-anchor="middle">65</text>
+<text class="tick" x="615" y="686" text-anchor="middle">Execution step (last cell retains final outputs)</text>
+<rect class="bar" data-panel="1" data-tensor="0" x="115.0000" y="634.4330" width="75.7576" height="2.1134" fill="#2563eb" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T0 INPUT 1x32 | lifetime [0,4] | offset 512 B | padded 128 B | inputs None/None</title></rect>
+<rect class="bar" data-panel="1" data-tensor="1" x="130.1515" y="640.7732" width="30.3030" height="4.2268" fill="#0d9488" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T1 DENSE 1x64 | lifetime [1,2] | offset 0 B | padded 256 B | inputs 0/None</title></rect>
+<rect class="bar" data-panel="1" data-tensor="2" x="145.3030" y="636.5464" width="30.3030" height="4.2268" fill="#d97706" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T2 RELU 1x64 | lifetime [2,3] | offset 256 B | padded 256 B | inputs 1/None</title></rect>
+<rect class="bar" data-panel="1" data-tensor="3" x="160.4545" y="642.8866" width="30.3030" height="2.1134" fill="#9333ea" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T3 DENSE 1x32 | lifetime [3,4] | offset 0 B | padded 128 B | inputs 2/None</title></rect>
+<rect class="bar" data-panel="1" data-tensor="4" x="175.6061" y="632.3196" width="75.7576" height="2.1134" fill="#dc2626" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T4 ADD 1x32 | lifetime [4,8] | offset 640 B | padded 128 B | inputs 3/0</title></rect>
+<rect class="bar" data-panel="1" data-tensor="5" x="190.7576" y="640.7732" width="30.3030" height="4.2268" fill="#0284c7" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T5 DENSE 1x64 | lifetime [5,6] | offset 0 B | padded 256 B | inputs 4/None</title></rect>
+<rect class="bar" data-panel="1" data-tensor="6" x="205.9091" y="636.5464" width="30.3030" height="4.2268" fill="#65a30d" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T6 RELU 1x64 | lifetime [6,7] | offset 256 B | padded 256 B | inputs 5/None</title></rect>
+<rect class="bar" data-panel="1" data-tensor="7" x="221.0606" y="642.8866" width="30.3030" height="2.1134" fill="#db2777" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T7 DENSE 1x32 | lifetime [7,8] | offset 0 B | padded 128 B | inputs 6/None</title></rect>
+<rect class="bar" data-panel="1" data-tensor="8" x="236.2121" y="634.4330" width="75.7576" height="2.1134" fill="#2563eb" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T8 ADD 1x32 | lifetime [8,12] | offset 512 B | padded 128 B | inputs 7/4</title></rect>
+<rect class="bar" data-panel="1" data-tensor="9" x="251.3636" y="640.7732" width="30.3030" height="4.2268" fill="#0d9488" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T9 DENSE 1x64 | lifetime [9,10] | offset 0 B | padded 256 B | inputs 8/None</title></rect>
+<rect class="bar" data-panel="1" data-tensor="10" x="266.5152" y="636.5464" width="30.3030" height="4.2268" fill="#d97706" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T10 RELU 1x64 | lifetime [10,11] | offset 256 B | padded 256 B | inputs 9/None</title></rect>
+<rect class="bar" data-panel="1" data-tensor="11" x="281.6667" y="642.8866" width="30.3030" height="2.1134" fill="#9333ea" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T11 DENSE 1x32 | lifetime [11,12] | offset 0 B | padded 128 B | inputs 10/None</title></rect>
+<rect class="bar" data-panel="1" data-tensor="12" x="296.8182" y="632.3196" width="75.7576" height="2.1134" fill="#dc2626" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T12 ADD 1x32 | lifetime [12,16] | offset 640 B | padded 128 B | inputs 11/8</title></rect>
+<rect class="bar" data-panel="1" data-tensor="13" x="311.9697" y="640.7732" width="30.3030" height="4.2268" fill="#0284c7" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T13 DENSE 1x64 | lifetime [13,14] | offset 0 B | padded 256 B | inputs 12/None</title></rect>
+<rect class="bar" data-panel="1" data-tensor="14" x="327.1212" y="636.5464" width="30.3030" height="4.2268" fill="#65a30d" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T14 RELU 1x64 | lifetime [14,15] | offset 256 B | padded 256 B | inputs 13/None</title></rect>
+<rect class="bar" data-panel="1" data-tensor="15" x="342.2727" y="642.8866" width="30.3030" height="2.1134" fill="#db2777" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T15 DENSE 1x32 | lifetime [15,16] | offset 0 B | padded 128 B | inputs 14/None</title></rect>
+<rect class="bar" data-panel="1" data-tensor="16" x="357.4242" y="634.4330" width="75.7576" height="2.1134" fill="#2563eb" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T16 ADD 1x32 | lifetime [16,20] | offset 512 B | padded 128 B | inputs 15/12</title></rect>
+<rect class="bar" data-panel="1" data-tensor="17" x="372.5758" y="640.7732" width="30.3030" height="4.2268" fill="#0d9488" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T17 DENSE 1x64 | lifetime [17,18] | offset 0 B | padded 256 B | inputs 16/None</title></rect>
+<rect class="bar" data-panel="1" data-tensor="18" x="387.7273" y="636.5464" width="30.3030" height="4.2268" fill="#d97706" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T18 RELU 1x64 | lifetime [18,19] | offset 256 B | padded 256 B | inputs 17/None</title></rect>
+<rect class="bar" data-panel="1" data-tensor="19" x="402.8788" y="642.8866" width="30.3030" height="2.1134" fill="#9333ea" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T19 DENSE 1x32 | lifetime [19,20] | offset 0 B | padded 128 B | inputs 18/None</title></rect>
+<rect class="bar" data-panel="1" data-tensor="20" x="418.0303" y="632.3196" width="75.7576" height="2.1134" fill="#dc2626" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T20 ADD 1x32 | lifetime [20,24] | offset 640 B | padded 128 B | inputs 19/16</title></rect>
+<rect class="bar" data-panel="1" data-tensor="21" x="433.1818" y="640.7732" width="30.3030" height="4.2268" fill="#0284c7" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T21 DENSE 1x64 | lifetime [21,22] | offset 0 B | padded 256 B | inputs 20/None</title></rect>
+<rect class="bar" data-panel="1" data-tensor="22" x="448.3333" y="636.5464" width="30.3030" height="4.2268" fill="#65a30d" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T22 RELU 1x64 | lifetime [22,23] | offset 256 B | padded 256 B | inputs 21/None</title></rect>
+<rect class="bar" data-panel="1" data-tensor="23" x="463.4848" y="642.8866" width="30.3030" height="2.1134" fill="#db2777" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T23 DENSE 1x32 | lifetime [23,24] | offset 0 B | padded 128 B | inputs 22/None</title></rect>
+<rect class="bar" data-panel="1" data-tensor="24" x="478.6364" y="634.4330" width="75.7576" height="2.1134" fill="#2563eb" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T24 ADD 1x32 | lifetime [24,28] | offset 512 B | padded 128 B | inputs 23/20</title></rect>
+<rect class="bar" data-panel="1" data-tensor="25" x="493.7879" y="640.7732" width="30.3030" height="4.2268" fill="#0d9488" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T25 DENSE 1x64 | lifetime [25,26] | offset 0 B | padded 256 B | inputs 24/None</title></rect>
+<rect class="bar" data-panel="1" data-tensor="26" x="508.9394" y="636.5464" width="30.3030" height="4.2268" fill="#d97706" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T26 RELU 1x64 | lifetime [26,27] | offset 256 B | padded 256 B | inputs 25/None</title></rect>
+<rect class="bar" data-panel="1" data-tensor="27" x="524.0909" y="642.8866" width="30.3030" height="2.1134" fill="#9333ea" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T27 DENSE 1x32 | lifetime [27,28] | offset 0 B | padded 128 B | inputs 26/None</title></rect>
+<rect class="bar" data-panel="1" data-tensor="28" x="539.2424" y="632.3196" width="75.7576" height="2.1134" fill="#dc2626" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T28 ADD 1x32 | lifetime [28,32] | offset 640 B | padded 128 B | inputs 27/24</title></rect>
+<rect class="bar" data-panel="1" data-tensor="29" x="554.3939" y="640.7732" width="30.3030" height="4.2268" fill="#0284c7" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T29 DENSE 1x64 | lifetime [29,30] | offset 0 B | padded 256 B | inputs 28/None</title></rect>
+<rect class="bar" data-panel="1" data-tensor="30" x="569.5455" y="636.5464" width="30.3030" height="4.2268" fill="#65a30d" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T30 RELU 1x64 | lifetime [30,31] | offset 256 B | padded 256 B | inputs 29/None</title></rect>
+<rect class="bar" data-panel="1" data-tensor="31" x="584.6970" y="642.8866" width="30.3030" height="2.1134" fill="#db2777" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T31 DENSE 1x32 | lifetime [31,32] | offset 0 B | padded 128 B | inputs 30/None</title></rect>
+<rect class="bar" data-panel="1" data-tensor="32" x="599.8485" y="634.4330" width="75.7576" height="2.1134" fill="#2563eb" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T32 ADD 1x32 | lifetime [32,36] | offset 512 B | padded 128 B | inputs 31/28</title></rect>
+<rect class="bar" data-panel="1" data-tensor="33" x="615.0000" y="640.7732" width="30.3030" height="4.2268" fill="#0d9488" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T33 DENSE 1x64 | lifetime [33,34] | offset 0 B | padded 256 B | inputs 32/None</title></rect>
+<rect class="bar" data-panel="1" data-tensor="34" x="630.1515" y="636.5464" width="30.3030" height="4.2268" fill="#d97706" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T34 RELU 1x64 | lifetime [34,35] | offset 256 B | padded 256 B | inputs 33/None</title></rect>
+<rect class="bar" data-panel="1" data-tensor="35" x="645.3030" y="642.8866" width="30.3030" height="2.1134" fill="#9333ea" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T35 DENSE 1x32 | lifetime [35,36] | offset 0 B | padded 128 B | inputs 34/None</title></rect>
+<rect class="bar" data-panel="1" data-tensor="36" x="660.4545" y="632.3196" width="75.7576" height="2.1134" fill="#dc2626" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T36 ADD 1x32 | lifetime [36,40] | offset 640 B | padded 128 B | inputs 35/32</title></rect>
+<rect class="bar" data-panel="1" data-tensor="37" x="675.6061" y="640.7732" width="30.3030" height="4.2268" fill="#0284c7" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T37 DENSE 1x64 | lifetime [37,38] | offset 0 B | padded 256 B | inputs 36/None</title></rect>
+<rect class="bar" data-panel="1" data-tensor="38" x="690.7576" y="636.5464" width="30.3030" height="4.2268" fill="#65a30d" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T38 RELU 1x64 | lifetime [38,39] | offset 256 B | padded 256 B | inputs 37/None</title></rect>
+<rect class="bar" data-panel="1" data-tensor="39" x="705.9091" y="642.8866" width="30.3030" height="2.1134" fill="#db2777" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T39 DENSE 1x32 | lifetime [39,40] | offset 0 B | padded 128 B | inputs 38/None</title></rect>
+<rect class="bar" data-panel="1" data-tensor="40" x="721.0606" y="634.4330" width="75.7576" height="2.1134" fill="#2563eb" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T40 ADD 1x32 | lifetime [40,44] | offset 512 B | padded 128 B | inputs 39/36</title></rect>
+<rect class="bar" data-panel="1" data-tensor="41" x="736.2121" y="640.7732" width="30.3030" height="4.2268" fill="#0d9488" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T41 DENSE 1x64 | lifetime [41,42] | offset 0 B | padded 256 B | inputs 40/None</title></rect>
+<rect class="bar" data-panel="1" data-tensor="42" x="751.3636" y="636.5464" width="30.3030" height="4.2268" fill="#d97706" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T42 RELU 1x64 | lifetime [42,43] | offset 256 B | padded 256 B | inputs 41/None</title></rect>
+<rect class="bar" data-panel="1" data-tensor="43" x="766.5152" y="642.8866" width="30.3030" height="2.1134" fill="#9333ea" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T43 DENSE 1x32 | lifetime [43,44] | offset 0 B | padded 128 B | inputs 42/None</title></rect>
+<rect class="bar" data-panel="1" data-tensor="44" x="781.6667" y="632.3196" width="75.7576" height="2.1134" fill="#dc2626" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T44 ADD 1x32 | lifetime [44,48] | offset 640 B | padded 128 B | inputs 43/40</title></rect>
+<rect class="bar" data-panel="1" data-tensor="45" x="796.8182" y="640.7732" width="30.3030" height="4.2268" fill="#0284c7" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T45 DENSE 1x64 | lifetime [45,46] | offset 0 B | padded 256 B | inputs 44/None</title></rect>
+<rect class="bar" data-panel="1" data-tensor="46" x="811.9697" y="636.5464" width="30.3030" height="4.2268" fill="#65a30d" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T46 RELU 1x64 | lifetime [46,47] | offset 256 B | padded 256 B | inputs 45/None</title></rect>
+<rect class="bar" data-panel="1" data-tensor="47" x="827.1212" y="642.8866" width="30.3030" height="2.1134" fill="#db2777" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T47 DENSE 1x32 | lifetime [47,48] | offset 0 B | padded 128 B | inputs 46/None</title></rect>
+<rect class="bar" data-panel="1" data-tensor="48" x="842.2727" y="634.4330" width="75.7576" height="2.1134" fill="#2563eb" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T48 ADD 1x32 | lifetime [48,52] | offset 512 B | padded 128 B | inputs 47/44</title></rect>
+<rect class="bar" data-panel="1" data-tensor="49" x="857.4242" y="640.7732" width="30.3030" height="4.2268" fill="#0d9488" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T49 DENSE 1x64 | lifetime [49,50] | offset 0 B | padded 256 B | inputs 48/None</title></rect>
+<rect class="bar" data-panel="1" data-tensor="50" x="872.5758" y="636.5464" width="30.3030" height="4.2268" fill="#d97706" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T50 RELU 1x64 | lifetime [50,51] | offset 256 B | padded 256 B | inputs 49/None</title></rect>
+<rect class="bar" data-panel="1" data-tensor="51" x="887.7273" y="642.8866" width="30.3030" height="2.1134" fill="#9333ea" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T51 DENSE 1x32 | lifetime [51,52] | offset 0 B | padded 128 B | inputs 50/None</title></rect>
+<rect class="bar" data-panel="1" data-tensor="52" x="902.8788" y="632.3196" width="75.7576" height="2.1134" fill="#dc2626" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T52 ADD 1x32 | lifetime [52,56] | offset 640 B | padded 128 B | inputs 51/48</title></rect>
+<rect class="bar" data-panel="1" data-tensor="53" x="918.0303" y="640.7732" width="30.3030" height="4.2268" fill="#0284c7" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T53 DENSE 1x64 | lifetime [53,54] | offset 0 B | padded 256 B | inputs 52/None</title></rect>
+<rect class="bar" data-panel="1" data-tensor="54" x="933.1818" y="636.5464" width="30.3030" height="4.2268" fill="#65a30d" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T54 RELU 1x64 | lifetime [54,55] | offset 256 B | padded 256 B | inputs 53/None</title></rect>
+<rect class="bar" data-panel="1" data-tensor="55" x="948.3333" y="642.8866" width="30.3030" height="2.1134" fill="#db2777" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T55 DENSE 1x32 | lifetime [55,56] | offset 0 B | padded 128 B | inputs 54/None</title></rect>
+<rect class="bar" data-panel="1" data-tensor="56" x="963.4848" y="634.4330" width="75.7576" height="2.1134" fill="#2563eb" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T56 ADD 1x32 | lifetime [56,60] | offset 512 B | padded 128 B | inputs 55/52</title></rect>
+<rect class="bar" data-panel="1" data-tensor="57" x="978.6364" y="640.7732" width="30.3030" height="4.2268" fill="#0d9488" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T57 DENSE 1x64 | lifetime [57,58] | offset 0 B | padded 256 B | inputs 56/None</title></rect>
+<rect class="bar" data-panel="1" data-tensor="58" x="993.7879" y="636.5464" width="30.3030" height="4.2268" fill="#d97706" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T58 RELU 1x64 | lifetime [58,59] | offset 256 B | padded 256 B | inputs 57/None</title></rect>
+<rect class="bar" data-panel="1" data-tensor="59" x="1008.9394" y="642.8866" width="30.3030" height="2.1134" fill="#9333ea" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T59 DENSE 1x32 | lifetime [59,60] | offset 0 B | padded 128 B | inputs 58/None</title></rect>
+<rect class="bar" data-panel="1" data-tensor="60" x="1024.0909" y="632.3196" width="75.7576" height="2.1134" fill="#dc2626" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T60 ADD 1x32 | lifetime [60,64] | offset 640 B | padded 128 B | inputs 59/56</title></rect>
+<rect class="bar" data-panel="1" data-tensor="61" x="1039.2424" y="640.7732" width="30.3030" height="4.2268" fill="#0284c7" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T61 DENSE 1x64 | lifetime [61,62] | offset 0 B | padded 256 B | inputs 60/None</title></rect>
+<rect class="bar" data-panel="1" data-tensor="62" x="1054.3939" y="636.5464" width="30.3030" height="4.2268" fill="#65a30d" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T62 RELU 1x64 | lifetime [62,63] | offset 256 B | padded 256 B | inputs 61/None</title></rect>
+<rect class="bar" data-panel="1" data-tensor="63" x="1069.5455" y="642.8866" width="30.3030" height="2.1134" fill="#db2777" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T63 DENSE 1x32 | lifetime [63,64] | offset 0 B | padded 128 B | inputs 62/None</title></rect>
+<rect class="bar" data-panel="1" data-tensor="64" x="1084.6970" y="640.7732" width="30.3030" height="2.1134" fill="#2563eb" fill-opacity=".78" stroke="#111827" stroke-width="2"><title>T64 ADD 1x32 | lifetime [64,65] | offset 128 B | padded 128 B | inputs 63/60 | pinned output</title></rect>
+<text x="40" y="715" font-size="17" font-weight="700">Reused detail — INDEPENDENT byte scale (read axis labels)</text>
+<rect x="115" y="735" width="1000" height="205" fill="white" stroke="#cbd5e1"/>
+<path d="M 115 940 H 1115" stroke="#e2e8f0"/>
+<text class="tick" x="105" y="944" text-anchor="end">0 B</text>
+<path d="M 115 888.75 H 1115" stroke="#e2e8f0"/>
+<text class="tick" x="105" y="892.75" text-anchor="end">192 B</text>
+<path d="M 115 837.5 H 1115" stroke="#e2e8f0"/>
+<text class="tick" x="105" y="841.5" text-anchor="end">384 B</text>
+<path d="M 115 786.25 H 1115" stroke="#e2e8f0"/>
+<text class="tick" x="105" y="790.25" text-anchor="end">576 B</text>
+<path d="M 115 735 H 1115" stroke="#e2e8f0"/>
+<text class="tick" x="105" y="739" text-anchor="end">768 B</text>
+<path d="M 115 735 V 940" stroke="#e2e8f0"/>
+<text class="tick" x="115" y="959" text-anchor="middle">0</text>
+<path d="M 221.061 735 V 940" stroke="#e2e8f0"/>
+<text class="tick" x="221.061" y="959" text-anchor="middle">7</text>
+<path d="M 327.121 735 V 940" stroke="#e2e8f0"/>
+<text class="tick" x="327.121" y="959" text-anchor="middle">14</text>
+<path d="M 433.182 735 V 940" stroke="#e2e8f0"/>
+<text class="tick" x="433.182" y="959" text-anchor="middle">21</text>
+<path d="M 539.242 735 V 940" stroke="#e2e8f0"/>
+<text class="tick" x="539.242" y="959" text-anchor="middle">28</text>
+<path d="M 645.303 735 V 940" stroke="#e2e8f0"/>
+<text class="tick" x="645.303" y="959" text-anchor="middle">35</text>
+<path d="M 751.364 735 V 940" stroke="#e2e8f0"/>
+<text class="tick" x="751.364" y="959" text-anchor="middle">42</text>
+<path d="M 857.424 735 V 940" stroke="#e2e8f0"/>
+<text class="tick" x="857.424" y="959" text-anchor="middle">49</text>
+<path d="M 963.485 735 V 940" stroke="#e2e8f0"/>
+<text class="tick" x="963.485" y="959" text-anchor="middle">56</text>
+<path d="M 1069.55 735 V 940" stroke="#e2e8f0"/>
+<text class="tick" x="1069.55" y="959" text-anchor="middle">63</text>
+<path d="M 1099.85 735 V 940" stroke="#e2e8f0"/>
+<text class="tick" x="1099.85" y="959" text-anchor="middle">65</text>
+<text class="tick" x="615" y="981" text-anchor="middle">Execution step (last cell retains final outputs)</text>
+<rect class="bar" data-panel="2" data-tensor="0" x="115.0000" y="769.1667" width="75.7576" height="34.1667" fill="#2563eb" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T0 INPUT 1x32 | lifetime [0,4] | offset 512 B | padded 128 B | inputs None/None</title></rect>
+<text x="152.8788" y="790.2500" text-anchor="middle" font-size="11" style="fill:white;pointer-events:none">T0</text>
+<rect class="bar" data-panel="2" data-tensor="1" x="130.1515" y="871.6667" width="30.3030" height="68.3333" fill="#0d9488" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T1 DENSE 1x64 | lifetime [1,2] | offset 0 B | padded 256 B | inputs 0/None</title></rect>
+<rect class="bar" data-panel="2" data-tensor="2" x="145.3030" y="803.3333" width="30.3030" height="68.3333" fill="#d97706" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T2 RELU 1x64 | lifetime [2,3] | offset 256 B | padded 256 B | inputs 1/None</title></rect>
+<rect class="bar" data-panel="2" data-tensor="3" x="160.4545" y="905.8333" width="30.3030" height="34.1667" fill="#9333ea" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T3 DENSE 1x32 | lifetime [3,4] | offset 0 B | padded 128 B | inputs 2/None</title></rect>
+<rect class="bar" data-panel="2" data-tensor="4" x="175.6061" y="735.0000" width="75.7576" height="34.1667" fill="#dc2626" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T4 ADD 1x32 | lifetime [4,8] | offset 640 B | padded 128 B | inputs 3/0</title></rect>
+<text x="213.4848" y="756.0833" text-anchor="middle" font-size="11" style="fill:white;pointer-events:none">T4</text>
+<rect class="bar" data-panel="2" data-tensor="5" x="190.7576" y="871.6667" width="30.3030" height="68.3333" fill="#0284c7" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T5 DENSE 1x64 | lifetime [5,6] | offset 0 B | padded 256 B | inputs 4/None</title></rect>
+<rect class="bar" data-panel="2" data-tensor="6" x="205.9091" y="803.3333" width="30.3030" height="68.3333" fill="#65a30d" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T6 RELU 1x64 | lifetime [6,7] | offset 256 B | padded 256 B | inputs 5/None</title></rect>
+<rect class="bar" data-panel="2" data-tensor="7" x="221.0606" y="905.8333" width="30.3030" height="34.1667" fill="#db2777" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T7 DENSE 1x32 | lifetime [7,8] | offset 0 B | padded 128 B | inputs 6/None</title></rect>
+<rect class="bar" data-panel="2" data-tensor="8" x="236.2121" y="769.1667" width="75.7576" height="34.1667" fill="#2563eb" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T8 ADD 1x32 | lifetime [8,12] | offset 512 B | padded 128 B | inputs 7/4</title></rect>
+<text x="274.0909" y="790.2500" text-anchor="middle" font-size="11" style="fill:white;pointer-events:none">T8</text>
+<rect class="bar" data-panel="2" data-tensor="9" x="251.3636" y="871.6667" width="30.3030" height="68.3333" fill="#0d9488" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T9 DENSE 1x64 | lifetime [9,10] | offset 0 B | padded 256 B | inputs 8/None</title></rect>
+<rect class="bar" data-panel="2" data-tensor="10" x="266.5152" y="803.3333" width="30.3030" height="68.3333" fill="#d97706" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T10 RELU 1x64 | lifetime [10,11] | offset 256 B | padded 256 B | inputs 9/None</title></rect>
+<rect class="bar" data-panel="2" data-tensor="11" x="281.6667" y="905.8333" width="30.3030" height="34.1667" fill="#9333ea" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T11 DENSE 1x32 | lifetime [11,12] | offset 0 B | padded 128 B | inputs 10/None</title></rect>
+<rect class="bar" data-panel="2" data-tensor="12" x="296.8182" y="735.0000" width="75.7576" height="34.1667" fill="#dc2626" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T12 ADD 1x32 | lifetime [12,16] | offset 640 B | padded 128 B | inputs 11/8</title></rect>
+<text x="334.6970" y="756.0833" text-anchor="middle" font-size="11" style="fill:white;pointer-events:none">T12</text>
+<rect class="bar" data-panel="2" data-tensor="13" x="311.9697" y="871.6667" width="30.3030" height="68.3333" fill="#0284c7" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T13 DENSE 1x64 | lifetime [13,14] | offset 0 B | padded 256 B | inputs 12/None</title></rect>
+<rect class="bar" data-panel="2" data-tensor="14" x="327.1212" y="803.3333" width="30.3030" height="68.3333" fill="#65a30d" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T14 RELU 1x64 | lifetime [14,15] | offset 256 B | padded 256 B | inputs 13/None</title></rect>
+<rect class="bar" data-panel="2" data-tensor="15" x="342.2727" y="905.8333" width="30.3030" height="34.1667" fill="#db2777" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T15 DENSE 1x32 | lifetime [15,16] | offset 0 B | padded 128 B | inputs 14/None</title></rect>
+<rect class="bar" data-panel="2" data-tensor="16" x="357.4242" y="769.1667" width="75.7576" height="34.1667" fill="#2563eb" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T16 ADD 1x32 | lifetime [16,20] | offset 512 B | padded 128 B | inputs 15/12</title></rect>
+<text x="395.3030" y="790.2500" text-anchor="middle" font-size="11" style="fill:white;pointer-events:none">T16</text>
+<rect class="bar" data-panel="2" data-tensor="17" x="372.5758" y="871.6667" width="30.3030" height="68.3333" fill="#0d9488" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T17 DENSE 1x64 | lifetime [17,18] | offset 0 B | padded 256 B | inputs 16/None</title></rect>
+<rect class="bar" data-panel="2" data-tensor="18" x="387.7273" y="803.3333" width="30.3030" height="68.3333" fill="#d97706" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T18 RELU 1x64 | lifetime [18,19] | offset 256 B | padded 256 B | inputs 17/None</title></rect>
+<rect class="bar" data-panel="2" data-tensor="19" x="402.8788" y="905.8333" width="30.3030" height="34.1667" fill="#9333ea" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T19 DENSE 1x32 | lifetime [19,20] | offset 0 B | padded 128 B | inputs 18/None</title></rect>
+<rect class="bar" data-panel="2" data-tensor="20" x="418.0303" y="735.0000" width="75.7576" height="34.1667" fill="#dc2626" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T20 ADD 1x32 | lifetime [20,24] | offset 640 B | padded 128 B | inputs 19/16</title></rect>
+<text x="455.9091" y="756.0833" text-anchor="middle" font-size="11" style="fill:white;pointer-events:none">T20</text>
+<rect class="bar" data-panel="2" data-tensor="21" x="433.1818" y="871.6667" width="30.3030" height="68.3333" fill="#0284c7" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T21 DENSE 1x64 | lifetime [21,22] | offset 0 B | padded 256 B | inputs 20/None</title></rect>
+<rect class="bar" data-panel="2" data-tensor="22" x="448.3333" y="803.3333" width="30.3030" height="68.3333" fill="#65a30d" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T22 RELU 1x64 | lifetime [22,23] | offset 256 B | padded 256 B | inputs 21/None</title></rect>
+<rect class="bar" data-panel="2" data-tensor="23" x="463.4848" y="905.8333" width="30.3030" height="34.1667" fill="#db2777" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T23 DENSE 1x32 | lifetime [23,24] | offset 0 B | padded 128 B | inputs 22/None</title></rect>
+<rect class="bar" data-panel="2" data-tensor="24" x="478.6364" y="769.1667" width="75.7576" height="34.1667" fill="#2563eb" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T24 ADD 1x32 | lifetime [24,28] | offset 512 B | padded 128 B | inputs 23/20</title></rect>
+<text x="516.5152" y="790.2500" text-anchor="middle" font-size="11" style="fill:white;pointer-events:none">T24</text>
+<rect class="bar" data-panel="2" data-tensor="25" x="493.7879" y="871.6667" width="30.3030" height="68.3333" fill="#0d9488" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T25 DENSE 1x64 | lifetime [25,26] | offset 0 B | padded 256 B | inputs 24/None</title></rect>
+<rect class="bar" data-panel="2" data-tensor="26" x="508.9394" y="803.3333" width="30.3030" height="68.3333" fill="#d97706" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T26 RELU 1x64 | lifetime [26,27] | offset 256 B | padded 256 B | inputs 25/None</title></rect>
+<rect class="bar" data-panel="2" data-tensor="27" x="524.0909" y="905.8333" width="30.3030" height="34.1667" fill="#9333ea" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T27 DENSE 1x32 | lifetime [27,28] | offset 0 B | padded 128 B | inputs 26/None</title></rect>
+<rect class="bar" data-panel="2" data-tensor="28" x="539.2424" y="735.0000" width="75.7576" height="34.1667" fill="#dc2626" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T28 ADD 1x32 | lifetime [28,32] | offset 640 B | padded 128 B | inputs 27/24</title></rect>
+<text x="577.1212" y="756.0833" text-anchor="middle" font-size="11" style="fill:white;pointer-events:none">T28</text>
+<rect class="bar" data-panel="2" data-tensor="29" x="554.3939" y="871.6667" width="30.3030" height="68.3333" fill="#0284c7" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T29 DENSE 1x64 | lifetime [29,30] | offset 0 B | padded 256 B | inputs 28/None</title></rect>
+<rect class="bar" data-panel="2" data-tensor="30" x="569.5455" y="803.3333" width="30.3030" height="68.3333" fill="#65a30d" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T30 RELU 1x64 | lifetime [30,31] | offset 256 B | padded 256 B | inputs 29/None</title></rect>
+<rect class="bar" data-panel="2" data-tensor="31" x="584.6970" y="905.8333" width="30.3030" height="34.1667" fill="#db2777" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T31 DENSE 1x32 | lifetime [31,32] | offset 0 B | padded 128 B | inputs 30/None</title></rect>
+<rect class="bar" data-panel="2" data-tensor="32" x="599.8485" y="769.1667" width="75.7576" height="34.1667" fill="#2563eb" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T32 ADD 1x32 | lifetime [32,36] | offset 512 B | padded 128 B | inputs 31/28</title></rect>
+<text x="637.7273" y="790.2500" text-anchor="middle" font-size="11" style="fill:white;pointer-events:none">T32</text>
+<rect class="bar" data-panel="2" data-tensor="33" x="615.0000" y="871.6667" width="30.3030" height="68.3333" fill="#0d9488" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T33 DENSE 1x64 | lifetime [33,34] | offset 0 B | padded 256 B | inputs 32/None</title></rect>
+<rect class="bar" data-panel="2" data-tensor="34" x="630.1515" y="803.3333" width="30.3030" height="68.3333" fill="#d97706" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T34 RELU 1x64 | lifetime [34,35] | offset 256 B | padded 256 B | inputs 33/None</title></rect>
+<rect class="bar" data-panel="2" data-tensor="35" x="645.3030" y="905.8333" width="30.3030" height="34.1667" fill="#9333ea" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T35 DENSE 1x32 | lifetime [35,36] | offset 0 B | padded 128 B | inputs 34/None</title></rect>
+<rect class="bar" data-panel="2" data-tensor="36" x="660.4545" y="735.0000" width="75.7576" height="34.1667" fill="#dc2626" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T36 ADD 1x32 | lifetime [36,40] | offset 640 B | padded 128 B | inputs 35/32</title></rect>
+<text x="698.3333" y="756.0833" text-anchor="middle" font-size="11" style="fill:white;pointer-events:none">T36</text>
+<rect class="bar" data-panel="2" data-tensor="37" x="675.6061" y="871.6667" width="30.3030" height="68.3333" fill="#0284c7" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T37 DENSE 1x64 | lifetime [37,38] | offset 0 B | padded 256 B | inputs 36/None</title></rect>
+<rect class="bar" data-panel="2" data-tensor="38" x="690.7576" y="803.3333" width="30.3030" height="68.3333" fill="#65a30d" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T38 RELU 1x64 | lifetime [38,39] | offset 256 B | padded 256 B | inputs 37/None</title></rect>
+<rect class="bar" data-panel="2" data-tensor="39" x="705.9091" y="905.8333" width="30.3030" height="34.1667" fill="#db2777" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T39 DENSE 1x32 | lifetime [39,40] | offset 0 B | padded 128 B | inputs 38/None</title></rect>
+<rect class="bar" data-panel="2" data-tensor="40" x="721.0606" y="769.1667" width="75.7576" height="34.1667" fill="#2563eb" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T40 ADD 1x32 | lifetime [40,44] | offset 512 B | padded 128 B | inputs 39/36</title></rect>
+<text x="758.9394" y="790.2500" text-anchor="middle" font-size="11" style="fill:white;pointer-events:none">T40</text>
+<rect class="bar" data-panel="2" data-tensor="41" x="736.2121" y="871.6667" width="30.3030" height="68.3333" fill="#0d9488" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T41 DENSE 1x64 | lifetime [41,42] | offset 0 B | padded 256 B | inputs 40/None</title></rect>
+<rect class="bar" data-panel="2" data-tensor="42" x="751.3636" y="803.3333" width="30.3030" height="68.3333" fill="#d97706" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T42 RELU 1x64 | lifetime [42,43] | offset 256 B | padded 256 B | inputs 41/None</title></rect>
+<rect class="bar" data-panel="2" data-tensor="43" x="766.5152" y="905.8333" width="30.3030" height="34.1667" fill="#9333ea" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T43 DENSE 1x32 | lifetime [43,44] | offset 0 B | padded 128 B | inputs 42/None</title></rect>
+<rect class="bar" data-panel="2" data-tensor="44" x="781.6667" y="735.0000" width="75.7576" height="34.1667" fill="#dc2626" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T44 ADD 1x32 | lifetime [44,48] | offset 640 B | padded 128 B | inputs 43/40</title></rect>
+<text x="819.5455" y="756.0833" text-anchor="middle" font-size="11" style="fill:white;pointer-events:none">T44</text>
+<rect class="bar" data-panel="2" data-tensor="45" x="796.8182" y="871.6667" width="30.3030" height="68.3333" fill="#0284c7" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T45 DENSE 1x64 | lifetime [45,46] | offset 0 B | padded 256 B | inputs 44/None</title></rect>
+<rect class="bar" data-panel="2" data-tensor="46" x="811.9697" y="803.3333" width="30.3030" height="68.3333" fill="#65a30d" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T46 RELU 1x64 | lifetime [46,47] | offset 256 B | padded 256 B | inputs 45/None</title></rect>
+<rect class="bar" data-panel="2" data-tensor="47" x="827.1212" y="905.8333" width="30.3030" height="34.1667" fill="#db2777" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T47 DENSE 1x32 | lifetime [47,48] | offset 0 B | padded 128 B | inputs 46/None</title></rect>
+<rect class="bar" data-panel="2" data-tensor="48" x="842.2727" y="769.1667" width="75.7576" height="34.1667" fill="#2563eb" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T48 ADD 1x32 | lifetime [48,52] | offset 512 B | padded 128 B | inputs 47/44</title></rect>
+<text x="880.1515" y="790.2500" text-anchor="middle" font-size="11" style="fill:white;pointer-events:none">T48</text>
+<rect class="bar" data-panel="2" data-tensor="49" x="857.4242" y="871.6667" width="30.3030" height="68.3333" fill="#0d9488" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T49 DENSE 1x64 | lifetime [49,50] | offset 0 B | padded 256 B | inputs 48/None</title></rect>
+<rect class="bar" data-panel="2" data-tensor="50" x="872.5758" y="803.3333" width="30.3030" height="68.3333" fill="#d97706" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T50 RELU 1x64 | lifetime [50,51] | offset 256 B | padded 256 B | inputs 49/None</title></rect>
+<rect class="bar" data-panel="2" data-tensor="51" x="887.7273" y="905.8333" width="30.3030" height="34.1667" fill="#9333ea" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T51 DENSE 1x32 | lifetime [51,52] | offset 0 B | padded 128 B | inputs 50/None</title></rect>
+<rect class="bar" data-panel="2" data-tensor="52" x="902.8788" y="735.0000" width="75.7576" height="34.1667" fill="#dc2626" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T52 ADD 1x32 | lifetime [52,56] | offset 640 B | padded 128 B | inputs 51/48</title></rect>
+<text x="940.7576" y="756.0833" text-anchor="middle" font-size="11" style="fill:white;pointer-events:none">T52</text>
+<rect class="bar" data-panel="2" data-tensor="53" x="918.0303" y="871.6667" width="30.3030" height="68.3333" fill="#0284c7" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T53 DENSE 1x64 | lifetime [53,54] | offset 0 B | padded 256 B | inputs 52/None</title></rect>
+<rect class="bar" data-panel="2" data-tensor="54" x="933.1818" y="803.3333" width="30.3030" height="68.3333" fill="#65a30d" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T54 RELU 1x64 | lifetime [54,55] | offset 256 B | padded 256 B | inputs 53/None</title></rect>
+<rect class="bar" data-panel="2" data-tensor="55" x="948.3333" y="905.8333" width="30.3030" height="34.1667" fill="#db2777" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T55 DENSE 1x32 | lifetime [55,56] | offset 0 B | padded 128 B | inputs 54/None</title></rect>
+<rect class="bar" data-panel="2" data-tensor="56" x="963.4848" y="769.1667" width="75.7576" height="34.1667" fill="#2563eb" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T56 ADD 1x32 | lifetime [56,60] | offset 512 B | padded 128 B | inputs 55/52</title></rect>
+<text x="1001.3636" y="790.2500" text-anchor="middle" font-size="11" style="fill:white;pointer-events:none">T56</text>
+<rect class="bar" data-panel="2" data-tensor="57" x="978.6364" y="871.6667" width="30.3030" height="68.3333" fill="#0d9488" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T57 DENSE 1x64 | lifetime [57,58] | offset 0 B | padded 256 B | inputs 56/None</title></rect>
+<rect class="bar" data-panel="2" data-tensor="58" x="993.7879" y="803.3333" width="30.3030" height="68.3333" fill="#d97706" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T58 RELU 1x64 | lifetime [58,59] | offset 256 B | padded 256 B | inputs 57/None</title></rect>
+<rect class="bar" data-panel="2" data-tensor="59" x="1008.9394" y="905.8333" width="30.3030" height="34.1667" fill="#9333ea" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T59 DENSE 1x32 | lifetime [59,60] | offset 0 B | padded 128 B | inputs 58/None</title></rect>
+<rect class="bar" data-panel="2" data-tensor="60" x="1024.0909" y="735.0000" width="75.7576" height="34.1667" fill="#dc2626" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T60 ADD 1x32 | lifetime [60,64] | offset 640 B | padded 128 B | inputs 59/56</title></rect>
+<text x="1061.9697" y="756.0833" text-anchor="middle" font-size="11" style="fill:white;pointer-events:none">T60</text>
+<rect class="bar" data-panel="2" data-tensor="61" x="1039.2424" y="871.6667" width="30.3030" height="68.3333" fill="#0284c7" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T61 DENSE 1x64 | lifetime [61,62] | offset 0 B | padded 256 B | inputs 60/None</title></rect>
+<rect class="bar" data-panel="2" data-tensor="62" x="1054.3939" y="803.3333" width="30.3030" height="68.3333" fill="#65a30d" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T62 RELU 1x64 | lifetime [62,63] | offset 256 B | padded 256 B | inputs 61/None</title></rect>
+<rect class="bar" data-panel="2" data-tensor="63" x="1069.5455" y="905.8333" width="30.3030" height="34.1667" fill="#db2777" fill-opacity=".78" stroke="white" stroke-width=".6"><title>T63 DENSE 1x32 | lifetime [63,64] | offset 0 B | padded 128 B | inputs 62/None</title></rect>
+<rect class="bar" data-panel="2" data-tensor="64" x="1084.6970" y="871.6667" width="30.3030" height="34.1667" fill="#2563eb" fill-opacity=".78" stroke="#111827" stroke-width="2"><title>T64 ADD 1x32 | lifetime [64,65] | offset 128 B | padded 128 B | inputs 63/60 | pinned output</title></rect>
+<text x="40" y="1040" font-size="13">Tensor arena only. Graph/weights, plan metadata, planner scratch, allocator overhead and process RSS are separate.</text>
+<text x="40" y="1062" font-size="13">The greedy heuristic can exceed the live-byte lower bound; this chart does not claim global optimality.</text></svg>
